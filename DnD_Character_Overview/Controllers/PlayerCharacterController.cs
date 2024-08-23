@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Controllers;
 
-[Route("api/player-characters")]
 [ApiController]
+[Route("api/v{version:apiVersion}/player-characters")]
+[ApiVersion("1.0")]
 public class PlayerCharacterController : ControllerBase
 {
     // Service

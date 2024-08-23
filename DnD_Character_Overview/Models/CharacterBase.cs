@@ -74,8 +74,8 @@ public abstract class CharacterBase
     [Required]
     public int InitiativeModifier => GetModifier(Dexterity); // Based on Dexterity by default
 
-    public List<string> Resistances { get; set; } = new List<string>(); // Damage resistances
-    public List<string> Weaknesses { get; set; } = new List<string>(); // Damage weaknesses
+    public List<DamageType> Resistances { get; set; } = new List<DamageType>(); // Damage resistances
+    public List<DamageType> Weaknesses { get; set; } = new List<DamageType>(); // Damage weaknesses
 
     public string? Conditions { get; set; } // List of current conditions (e.g., poisoned, stunned)
 
@@ -86,7 +86,7 @@ public abstract class CharacterBase
     public bool HasOver20Stats { get; set; } = false; // Indicates if stats can exceed 20
 
     // Languages
-    public List<string> KnownLanguages { get; set; } = new List<string> { "Common" }; // Languages known by the character
+    public List<Languages> KnownLanguages { get; set; } = new List<Languages> { Languages.Common }; // Languages known by the character
 
     // Relationships
     public ICollection<CharacterClass>? CharacterClasses { get; set; } // Character's class(es)
@@ -107,7 +107,7 @@ public abstract class CharacterBase
     {
         if (stat > MaxStatValue && !HasOver20Stats)
         {
-            throw new ValidationException($"{statName} cannot exceed {MaxStatValue} without special abilities.");
+            throw new FluentValidation.ValidationException($"{statName} cannot exceed {MaxStatValue} without special abilities.");
         }
     }
 

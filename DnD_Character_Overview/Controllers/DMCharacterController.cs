@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Controllers;
 
-[Route("api/dm-characters")]
 [ApiController]
+[Route("api/v{version:apiVersion}/dm-characters")]
+[ApiVersion("1.0")]
 public class DMCharacterController : ControllerBase
 {
     // Service

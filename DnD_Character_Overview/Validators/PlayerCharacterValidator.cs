@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace Validators;
 
 public class PlayerCharacterValidator : AbstractValidator<PlayerCharacter>

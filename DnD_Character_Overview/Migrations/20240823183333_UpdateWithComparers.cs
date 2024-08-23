@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DnD_CO.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UpdateWithComparers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,24 +20,41 @@ namespace DnD_CO.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LegendaryActions = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SpecialAbilities = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Race = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
+                    ImagePath = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CurrentHP = table.Column<int>(type: "int", nullable: true),
+                    Strength = table.Column<int>(type: "int", nullable: false),
+                    Dexterity = table.Column<int>(type: "int", nullable: false),
+                    Constitution = table.Column<int>(type: "int", nullable: false),
+                    Intelligence = table.Column<int>(type: "int", nullable: false),
+                    Wisdom = table.Column<int>(type: "int", nullable: false),
+                    Charisma = table.Column<int>(type: "int", nullable: false),
                     MaxHP = table.Column<int>(type: "int", nullable: false),
+                    CurrentHP = table.Column<int>(type: "int", nullable: true),
                     TempHP = table.Column<int>(type: "int", nullable: false),
-                    Conditions = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ArmorClass = table.Column<int>(type: "int", nullable: false),
                     WalkingSpeed = table.Column<int>(type: "int", nullable: false),
                     FlyingSpeed = table.Column<int>(type: "int", nullable: true),
                     SwimmingSpeed = table.Column<int>(type: "int", nullable: true),
                     DarkvisionRange = table.Column<int>(type: "int", nullable: true),
-                    LegendaryActions = table.Column<string>(type: "longtext", nullable: true)
+                    Resistances = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    SpecialAbilities = table.Column<string>(type: "longtext", nullable: true)
+                    Weaknesses = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Conditions = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsAlive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    HasOver20Stats = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    KnownLanguages = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -52,21 +69,37 @@ namespace DnD_CO.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PlayerName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Race = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CurrentHP = table.Column<int>(type: "int", nullable: false),
-                    MaxHP = table.Column<int>(type: "int", nullable: false),
-                    TempHP = table.Column<int>(type: "int", nullable: false),
-                    Conditions = table.Column<string>(type: "longtext", nullable: true)
+                    ImagePath = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Strength = table.Column<int>(type: "int", nullable: false),
+                    Dexterity = table.Column<int>(type: "int", nullable: false),
+                    Constitution = table.Column<int>(type: "int", nullable: false),
+                    Intelligence = table.Column<int>(type: "int", nullable: false),
+                    Wisdom = table.Column<int>(type: "int", nullable: false),
+                    Charisma = table.Column<int>(type: "int", nullable: false),
+                    MaxHP = table.Column<int>(type: "int", nullable: false),
+                    CurrentHP = table.Column<int>(type: "int", nullable: true),
+                    TempHP = table.Column<int>(type: "int", nullable: false),
+                    ArmorClass = table.Column<int>(type: "int", nullable: false),
                     WalkingSpeed = table.Column<int>(type: "int", nullable: false),
                     FlyingSpeed = table.Column<int>(type: "int", nullable: true),
                     SwimmingSpeed = table.Column<int>(type: "int", nullable: true),
                     DarkvisionRange = table.Column<int>(type: "int", nullable: true),
+                    Resistances = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Weaknesses = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Conditions = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsAlive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    PlayerName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    HasOver20Stats = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    KnownLanguages = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>

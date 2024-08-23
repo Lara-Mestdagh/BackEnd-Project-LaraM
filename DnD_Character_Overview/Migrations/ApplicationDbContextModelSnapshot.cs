@@ -61,8 +61,17 @@ namespace DnD_CO.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ArmorClass")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Charisma")
+                        .HasColumnType("int");
+
                     b.Property<string>("Conditions")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("Constitution")
+                        .HasColumnType("int");
 
                     b.Property<int?>("CurrentHP")
                         .HasColumnType("int");
@@ -73,8 +82,28 @@ namespace DnD_CO.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("Dexterity")
+                        .HasColumnType("int");
+
                     b.Property<int?>("FlyingSpeed")
                         .HasColumnType("int");
+
+                    b.Property<bool>("HasOver20Stats")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("Intelligence")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAlive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("KnownLanguages")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("LegendaryActions")
                         .HasColumnType("longtext");
@@ -92,8 +121,15 @@ namespace DnD_CO.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("Resistances")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SpecialAbilities")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("Strength")
+                        .HasColumnType("int");
 
                     b.Property<int?>("SwimmingSpeed")
                         .HasColumnType("int");
@@ -102,6 +138,13 @@ namespace DnD_CO.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("WalkingSpeed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Weaknesses")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Wisdom")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -160,20 +203,46 @@ namespace DnD_CO.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ArmorClass")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Charisma")
+                        .HasColumnType("int");
+
                     b.Property<string>("Conditions")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("CurrentHP")
+                    b.Property<int>("Constitution")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CurrentHP")
                         .HasColumnType("int");
 
                     b.Property<int?>("DarkvisionRange")
                         .HasColumnType("int");
 
+                    b.Property<int>("Dexterity")
+                        .HasColumnType("int");
+
                     b.Property<int?>("FlyingSpeed")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HasOver20Stats")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ImagePath")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("Intelligence")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsAlive")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("KnownLanguages")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("MaxHP")
                         .HasColumnType("int");
@@ -193,6 +262,13 @@ namespace DnD_CO.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("Resistances")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Strength")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SwimmingSpeed")
                         .HasColumnType("int");
 
@@ -200,6 +276,13 @@ namespace DnD_CO.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("WalkingSpeed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Weaknesses")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Wisdom")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
