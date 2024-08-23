@@ -34,7 +34,7 @@ public class PlayerCharacterRepository : IPlayerCharacterRepository
     {
         if (playerCharacter == null)
         {
-            return;  // You could throw an exception, but generally you'd handle this validation before calling the repository
+            throw new ArgumentNullException(nameof(playerCharacter), "PlayerCharacter cannot be null.");
         }
 
         await _context.PlayerCharacters.AddAsync(playerCharacter);

@@ -122,7 +122,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Resistances")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("SpecialAbilities")
@@ -141,7 +140,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Weaknesses")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Wisdom")
@@ -263,7 +261,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Resistances")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Strength")
@@ -279,7 +276,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Weaknesses")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Wisdom")

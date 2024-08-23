@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DnD_CO.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateWithComparers : Migration
+    public partial class UpdateCharacterBaseSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,9 +46,9 @@ namespace DnD_CO.Migrations
                     FlyingSpeed = table.Column<int>(type: "int", nullable: true),
                     SwimmingSpeed = table.Column<int>(type: "int", nullable: true),
                     DarkvisionRange = table.Column<int>(type: "int", nullable: true),
-                    Resistances = table.Column<string>(type: "longtext", nullable: false)
+                    Resistances = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Weaknesses = table.Column<string>(type: "longtext", nullable: false)
+                    Weaknesses = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Conditions = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -91,9 +91,9 @@ namespace DnD_CO.Migrations
                     FlyingSpeed = table.Column<int>(type: "int", nullable: true),
                     SwimmingSpeed = table.Column<int>(type: "int", nullable: true),
                     DarkvisionRange = table.Column<int>(type: "int", nullable: true),
-                    Resistances = table.Column<string>(type: "longtext", nullable: false)
+                    Resistances = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Weaknesses = table.Column<string>(type: "longtext", nullable: false)
+                    Weaknesses = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Conditions = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),

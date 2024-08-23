@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnD_CO.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240823183333_UpdateWithComparers")]
-    partial class UpdateWithComparers
+    [Migration("20240823191638_UpdateCharacterBaseSchema")]
+    partial class UpdateCharacterBaseSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,7 +125,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Resistances")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("SpecialAbilities")
@@ -144,7 +143,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Weaknesses")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Wisdom")
@@ -266,7 +264,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("Resistances")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Strength")
@@ -282,7 +279,6 @@ namespace DnD_CO.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Weaknesses")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Wisdom")

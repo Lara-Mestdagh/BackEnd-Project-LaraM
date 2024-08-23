@@ -51,8 +51,12 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-// Add controllers
-builder.Services.AddControllers();
+// Add controllers and configure JSON serialization to use string enums
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 // Build the application
 var app = builder.Build();

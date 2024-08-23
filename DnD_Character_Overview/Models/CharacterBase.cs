@@ -1,6 +1,4 @@
 // Since both the player and DM characters share the same properties, we can create a base class that both inherit from.
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Models;
 
@@ -74,10 +72,10 @@ public abstract class CharacterBase
     [Required]
     public int InitiativeModifier => GetModifier(Dexterity); // Based on Dexterity by default
 
-    public List<DamageType> Resistances { get; set; } = new List<DamageType>(); // Damage resistances
-    public List<DamageType> Weaknesses { get; set; } = new List<DamageType>(); // Damage weaknesses
+    public List<DamageType>? Resistances { get; set; } = new List<DamageType>(); // Damage resistances
+    public List<DamageType>? Weaknesses { get; set; } = new List<DamageType>(); // Damage weaknesses
 
-    public string? Conditions { get; set; } // List of current conditions (e.g., poisoned, stunned)
+    public List<Conditions>? Conditions { get; set; } = new List<Conditions>(); // List of current conditions (e.g., poisoned, stunned)
 
     // Status
     [Required]
@@ -86,13 +84,39 @@ public abstract class CharacterBase
     public bool HasOver20Stats { get; set; } = false; // Indicates if stats can exceed 20
 
     // Languages
-    public List<Languages> KnownLanguages { get; set; } = new List<Languages> { Languages.Common }; // Languages known by the character
+    public List<Languages> KnownLanguages { get; set; } = new List<Languages>(); // Languages known by the character
 
     // Relationships
     public ICollection<CharacterClass>? CharacterClasses { get; set; } // Character's class(es)
     public ICollection<InventoryItem>? InventoryItems { get; set; } // Inventory items
 
+    // Constructor
+    public CharacterBase()
+    {
+        // Ensure "Common" is added only if it's not already present
+        if (!KnownLanguages.Contains(Languages.Common))
+        {
+            KnownLanguages.Add(Languages.Common);
+        }
+    }
+
     // Methods
+    // Method to add known languages, ensuring "Common" is not duplicated
+    public void AddKnownLanguage(Languages language)
+    {
+        if (!KnownLanguages.Contains(language))
+        {
+            KnownLanguages.Add(language);
+        }
+    }
+
+    // Method to remove known languages
+    public void RemoveKnownLanguage(Languages language)
+    {
+        KnownLanguages.Remove(language);
+    }
+
+    // Method to validate stats
     public void ValidateStats()
     {
         ValidateStat(Strength, "Strength");
@@ -103,6 +127,7 @@ public abstract class CharacterBase
         ValidateStat(Charisma, "Charisma");
     }
 
+    // Method to validate a single stat
     protected void ValidateStat(int stat, string statName)
     {
         if (stat > MaxStatValue && !HasOver20Stats)

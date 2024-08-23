@@ -8,6 +8,7 @@ public class DMCharacter : CharacterBase
     public string? LegendaryActions { get; set; } // Legendary actions for powerful NPCs or monsters
     public string? SpecialAbilities { get; set; } // Special abilities for the character
 
+
     // Additional properties or methods specific to DMCharacter can be added here
 }
 

@@ -26,77 +26,85 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Custom converter for List<Enums.Languages>
-        var languagesConverter = new ValueConverter<List<Enums.Languages>, string>(
-            v => string.Join(',', v.Select(l => l.ToString())),
-            v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(l => Enum.Parse<Enums.Languages>(l)).ToList());
+            var languagesConverter = new ValueConverter<List<Enums.Languages>, string>(
+                v => string.Join(',', v.Select(l => l.ToString())),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(l => Enum.Parse<Enums.Languages>(l)).ToList());
 
-        // Custom converter for List<Enums.DamageType>
-        var damageTypeConverter = new ValueConverter<List<Enums.DamageType>, string>(
-            v => string.Join(',', v.Select(d => d.ToString())),
-            v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(d => Enum.Parse<Enums.DamageType>(d)).ToList());
+            var languagesComparer = new ValueComparer<List<Enums.Languages>>(
+                (c1, c2) => c1.SequenceEqual(c2), // Equality logic
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), // Hash code logic
+                c => c.ToList()); // Deep copy logic
 
-        // Custom comparer for List<Enums.Languages>
-        var languagesComparer = new ValueComparer<List<Enums.Languages>>(
-            (c1, c2) => c1!.SequenceEqual(c2!),
-            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-            c => c.ToList());
+            // Custom converter for List<Enums.DamageType>
+            var damageTypeConverter = new ValueConverter<List<Enums.DamageType>, string>(
+                v => string.Join(',', v.Select(d => d.ToString())),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(d => Enum.Parse<Enums.DamageType>(d)).ToList());
 
-        // Custom comparer for List<Enums.DamageType>
-        var damageTypeComparer = new ValueComparer<List<Enums.DamageType>>(
-            (c1, c2) => c1!.SequenceEqual(c2!),
-            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-            c => c.ToList());
+            var damageTypeComparer = new ValueComparer<List<Enums.DamageType>>(
+                (c1, c2) => c1.SequenceEqual(c2),
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c.ToList());
 
-        // Configurations for PlayerCharacter
-        modelBuilder.Entity<PlayerCharacter>()
-            .HasMany(c => c.InventoryItems)
-            .WithOne(i => i.PlayerCharacter)
-            .HasForeignKey(i => i.PlayerCharacterId);
+            // Custom converter for List<Enums.Conditions>
+            var conditionsConverter = new ValueConverter<List<Enums.Conditions>, string>(
+                v => string.Join(',', v.Select(c => c.ToString())),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(c => Enum.Parse<Enums.Conditions>(c)).ToList());
 
-        modelBuilder.Entity<PlayerCharacter>()
-            .Property(e => e.KnownLanguages)
-            .HasConversion(languagesConverter)
-            .Metadata.SetValueComparer(languagesComparer);
+            var conditionsComparer = new ValueComparer<List<Enums.Conditions>>(
+                (c1, c2) => c1.SequenceEqual(c2),
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c.ToList());
 
-        modelBuilder.Entity<PlayerCharacter>()
-            .Property(e => e.Resistances)
-            .HasConversion(damageTypeConverter)
-            .Metadata.SetValueComparer(damageTypeComparer);
+            // Apply the custom converters and comparers to PlayerCharacter
+            modelBuilder.Entity<PlayerCharacter>()
+                .Property(e => e.KnownLanguages)
+                .HasConversion(languagesConverter)
+                .Metadata.SetValueComparer(languagesComparer);
 
-        modelBuilder.Entity<PlayerCharacter>()
-            .Property(e => e.Weaknesses)
-            .HasConversion(damageTypeConverter)
-            .Metadata.SetValueComparer(damageTypeComparer);
+            modelBuilder.Entity<PlayerCharacter>()
+                .Property(e => e.Resistances)
+                .HasConversion(damageTypeConverter)
+                .Metadata.SetValueComparer(damageTypeComparer);
 
-        // Configurations for DMCharacter
-        modelBuilder.Entity<DMCharacter>()
-            .HasMany(c => c.InventoryItems)
-            .WithOne(i => i.DMCharacter)
-            .HasForeignKey(i => i.DMCharacterId);
+            modelBuilder.Entity<PlayerCharacter>()
+                .Property(e => e.Weaknesses)
+                .HasConversion(damageTypeConverter)
+                .Metadata.SetValueComparer(damageTypeComparer);
 
-        modelBuilder.Entity<DMCharacter>()
-            .Property(e => e.KnownLanguages)
-            .HasConversion(languagesConverter)
-            .Metadata.SetValueComparer(languagesComparer);
+            modelBuilder.Entity<PlayerCharacter>()
+                .Property(e => e.Conditions)
+                .HasConversion(conditionsConverter)
+                .Metadata.SetValueComparer(conditionsComparer);
 
-        modelBuilder.Entity<DMCharacter>()
-            .Property(e => e.Resistances)
-            .HasConversion(damageTypeConverter)
-            .Metadata.SetValueComparer(damageTypeComparer);
+            // Apply the custom converters and comparers to DMCharacter
+            modelBuilder.Entity<DMCharacter>()
+                .Property(e => e.KnownLanguages)
+                .HasConversion(languagesConverter)
+                .Metadata.SetValueComparer(languagesComparer);
 
-        modelBuilder.Entity<DMCharacter>()
-            .Property(e => e.Weaknesses)
-            .HasConversion(damageTypeConverter)
-            .Metadata.SetValueComparer(damageTypeComparer);
+            modelBuilder.Entity<DMCharacter>()
+                .Property(e => e.Resistances)
+                .HasConversion(damageTypeConverter)
+                .Metadata.SetValueComparer(damageTypeComparer);
 
-        // Configuration for SharedInventory as a singleton
-        modelBuilder.Entity<SharedInventory>()
-            .HasData(new SharedInventory { Id = 1 });
+            modelBuilder.Entity<DMCharacter>()
+                .Property(e => e.Weaknesses)
+                .HasConversion(damageTypeConverter)
+                .Metadata.SetValueComparer(damageTypeComparer);
 
-        // SharedInventory has many InventoryItems
-        modelBuilder.Entity<SharedInventory>()
-            .HasMany(s => s.InventoryItems)
-            .WithOne(i => i.SharedInventory)
-            .HasForeignKey(i => i.SharedInventoryId);
+            modelBuilder.Entity<DMCharacter>()
+                .Property(e => e.Conditions)
+                .HasConversion(conditionsConverter)
+                .Metadata.SetValueComparer(conditionsComparer);
+
+            // Configuration for SharedInventory as a singleton
+            modelBuilder.Entity<SharedInventory>()
+                .HasData(new SharedInventory { Id = 1 });
+
+            // SharedInventory has many InventoryItems
+            modelBuilder.Entity<SharedInventory>()
+                .HasMany(s => s.InventoryItems)
+                .WithOne(i => i.SharedInventory)
+                .HasForeignKey(i => i.SharedInventoryId);
     }
 }

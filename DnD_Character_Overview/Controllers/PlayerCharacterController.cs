@@ -39,8 +39,13 @@ public class PlayerCharacterController : ControllerBase
 
     // POST: api/player-characters
     [HttpPost]
-    public async Task<ActionResult<PlayerCharacter>> CreateCharacter(PlayerCharacter playerCharacter)
+    public async Task<ActionResult<PlayerCharacter>> CreateCharacter([FromBody] PlayerCharacter playerCharacter)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         await _service.AddAsync(playerCharacter);
 
         return CreatedAtAction(nameof(GetCharacter), new { id = playerCharacter.Id }, playerCharacter);
