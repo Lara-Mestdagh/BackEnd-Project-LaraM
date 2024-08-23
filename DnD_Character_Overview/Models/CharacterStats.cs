@@ -1,4 +1,4 @@
-namespace Structs;
+namespace Models;
 
 public class CharacterStats
 {
