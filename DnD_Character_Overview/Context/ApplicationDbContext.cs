@@ -1,4 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Context;
 
 public class ApplicationDbContext : DbContext
@@ -19,6 +24,16 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // Custom converter for List<Enums.Languages>
+        var languagesConverter = new ValueConverter<List<Enums.Languages>, string>(
+            v => string.Join(',', v.Select(l => l.ToString())),
+            v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(l => Enum.Parse<Enums.Languages>(l)).ToList());
+
+        // Custom converter for List<Enums.DamageType>
+        var damageTypeConverter = new ValueConverter<List<Enums.DamageType>, string>(
+            v => string.Join(',', v.Select(d => d.ToString())),
+            v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(d => Enum.Parse<Enums.DamageType>(d)).ToList());
+
         // Configurations for PlayerCharacter
         // PlayerCharacter has many InventoryItems
         modelBuilder.Entity<PlayerCharacter>()
@@ -26,12 +41,38 @@ public class ApplicationDbContext : DbContext
             .WithOne(i => i.PlayerCharacter)
             .HasForeignKey(i => i.PlayerCharacterId);
 
+        // Apply the custom converters to PlayerCharacter
+        modelBuilder.Entity<PlayerCharacter>()
+            .Property(e => e.KnownLanguages)
+            .HasConversion(languagesConverter);
+
+        modelBuilder.Entity<PlayerCharacter>()
+            .Property(e => e.Resistances)
+            .HasConversion(damageTypeConverter);
+
+        modelBuilder.Entity<PlayerCharacter>()
+            .Property(e => e.Weaknesses)
+            .HasConversion(damageTypeConverter);
+
         // Configurations for DMCharacter
         // DMCharacter has many InventoryItems
         modelBuilder.Entity<DMCharacter>()
             .HasMany(c => c.InventoryItems)
             .WithOne(i => i.DMCharacter)
             .HasForeignKey(i => i.DMCharacterId);
+
+        // Apply the custom converters to DMCharacter
+        modelBuilder.Entity<DMCharacter>()
+            .Property(e => e.KnownLanguages)
+            .HasConversion(languagesConverter);
+
+        modelBuilder.Entity<DMCharacter>()
+            .Property(e => e.Resistances)
+            .HasConversion(damageTypeConverter);
+
+        modelBuilder.Entity<DMCharacter>()
+            .Property(e => e.Weaknesses)
+            .HasConversion(damageTypeConverter);
 
         // Configuration for SharedInventory as a singleton
         modelBuilder.Entity<SharedInventory>()

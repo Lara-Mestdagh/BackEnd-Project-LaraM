@@ -1,6 +1,6 @@
 namespace Enums;
 
-public enum Condition
+public enum Conditions
 {
     Blinded,
     Charmed,
