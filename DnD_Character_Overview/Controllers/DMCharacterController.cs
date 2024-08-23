@@ -6,8 +6,10 @@ namespace Controllers;
 [ApiController]
 public class DMCharacterController : ControllerBase
 {
+    // Service
     private readonly IDMCharacterService _service;
 
+    // Constructor
     public DMCharacterController(IDMCharacterService service)
     {
         _service = service;
@@ -49,7 +51,7 @@ public class DMCharacterController : ControllerBase
     {
         if (id != dmCharacter.Id)
         {
-            return BadRequest();
+            return BadRequest("Character ID mismatch.");
         }
 
         await _service.UpdateAsync(dmCharacter);

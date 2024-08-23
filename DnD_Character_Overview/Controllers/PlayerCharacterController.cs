@@ -6,8 +6,10 @@ namespace Controllers;
 [ApiController]
 public class PlayerCharacterController : ControllerBase
 {
+    // Service
     private readonly IPlayerCharacterService _service;
 
+    // Constructor
     public PlayerCharacterController(IPlayerCharacterService service)
     {
         _service = service;
@@ -49,7 +51,7 @@ public class PlayerCharacterController : ControllerBase
     {
         if (id != playerCharacter.Id)
         {
-            return BadRequest();
+            return BadRequest("Character ID mismatch.");
         }
 
         await _service.UpdateAsync(playerCharacter);
