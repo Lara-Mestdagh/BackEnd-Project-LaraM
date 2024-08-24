@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/dm-characters")]
-[ApiVersion("1.0")]
+[ApiVersion("2")]
+[Authorize]
 public class DMCharacterController : ControllerBase
 {
     // Service

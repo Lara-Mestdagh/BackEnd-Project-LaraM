@@ -10,8 +10,8 @@ Configure relationships in the ApplicationDbContext.            Done
 ### Implement API Endpoints
 
 Develop the character and inventory management endpoints.
-Implement JWT authentication to secure the endpoints.
-Add API versioning and caching as necessary.
+Implement JWT authentication to secure the endpoints.           Done
+Add API versioning and caching as necessary.                    Partly Done
 
 ### Develop File Management Features
 

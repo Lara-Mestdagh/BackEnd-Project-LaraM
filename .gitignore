@@ -5,6 +5,7 @@
 
 # Project files to ignore
 appsettings.json
+secret/
 
 # User-specific files
 *.rsuser

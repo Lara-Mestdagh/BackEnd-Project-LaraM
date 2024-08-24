@@ -7,6 +7,7 @@ global using Interfaces;
 global using Services;
 global using Repositories;
 global using Validators;
+global using Secret;
 
 
 global using Open5e;

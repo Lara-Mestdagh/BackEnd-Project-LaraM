@@ -1,8 +1,37 @@
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Firebase Admin SDK configuration
+FirebaseApp.Create(new AppOptions()  // Credentials are stored in appsettings.json
+{
+    Credential = GoogleCredential.FromFile(builder.Configuration["Firebase:CredentialsPath"])
+});
+
+// Add Authorization and JWT Authentication
+builder.Services.AddAuthorization();
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://securetoken.google.com/dnd-co"; // Your Firebase project ID
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "https://securetoken.google.com/dnd-co", // Your Firebase project ID
+            ValidAudience = "dnd-co" // Your Firebase project ID
+        };
+    });
 
 // Add services to the container
 
@@ -23,6 +52,9 @@ builder.Services.AddFluentValidationAutoValidation()
 builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterValidator>();
 
+// Register the JwtTokenGenerator
+builder.Services.AddSingleton<JwtTokenGenerator>();
+
 // Add services for Entity Framework Core
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -33,7 +65,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add API Versioning
 builder.Services.AddApiVersioning(options =>
 {
-    options.DefaultApiVersion = new ApiVersion(1, 0);  // Default API version is 1.0
+    options.DefaultApiVersion = new ApiVersion(2, 0);  // Current version of the API
     options.AssumeDefaultVersionWhenUnspecified = true;  // If no version is specified, use the default
     options.ReportApiVersions = true;  // Report API versions supported for the response
 });
@@ -50,7 +82,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
 // Add controllers and configure JSON serialization to use string enums
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -58,8 +89,13 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
+
+
 // Build the application
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Ensure the database and tables are created
 using (var scope = app.Services.CreateScope())
