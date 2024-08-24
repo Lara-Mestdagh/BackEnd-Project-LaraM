@@ -12,6 +12,10 @@ public class PlayerCharacterValidator : AbstractValidator<PlayerCharacter>
             .NotEmpty().WithMessage("Race is required.")
             .Length(1, 255).WithMessage("Race must be between 1 and 255 characters.");
 
+        RuleFor(pc => pc.PlayerName)
+            .NotEmpty().WithMessage("Player Name is required.")
+            .Length(1, 255).WithMessage("Player Name must be between 1 and 255 characters.");
+
         RuleFor(pc => pc.Strength)
             .InclusiveBetween(1, 20).WithMessage("Strength must be between 1 and 20.");
 
@@ -42,5 +46,12 @@ public class PlayerCharacterValidator : AbstractValidator<PlayerCharacter>
 
         RuleFor(pc => pc.WalkingSpeed)
             .GreaterThan(0).WithMessage("Walking Speed must be greater than 0.");
+
+        RuleFor(pc => pc.KnownLanguages)
+            .Must(languages => languages != null && languages.Count > 0).WithMessage("Known Languages cannot be empty.");
+        
+        RuleFor(pc => pc)
+            .Must(pc => pc.IsAlive || pc.CurrentHP == 0)
+            .WithMessage("A dead character must have 0 current HP.");
     }
 }

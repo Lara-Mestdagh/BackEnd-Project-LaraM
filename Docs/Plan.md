@@ -102,20 +102,26 @@ A summary page showing the status of the entire party.
 
 ### Character Endpoints
 
-- **GET /api/characters** – Retrieve a list of all characters.
-- **GET /api/characters/{id}** – Retrieve details of a specific character.
-- **POST /api/characters** – Create a new character with basic info (name, race, class, etc.).
-- **PUT /api/characters/{id}** – Update character details, including HP, conditions, vision capabilities, and movement speeds (walking, flying, swimming).
-- **DELETE /api/characters/{id}** – Soft delete a character (mark as inactive).
+- **GET /api/player-characters** – Retrieve a list of all player characters.
+- **GET /api/player-characters/{id}** – Retrieve details of a specific player character.
+- **POST /api/player-characters** – Create a new player character with basic info (name, race, class, etc.).
+- **PUT /api/player-characters/{id}** – Update player character details, including HP, conditions, vision capabilities, and movement speeds (walking, flying, swimming).
+- **DELETE /api/player-characters/{id}** – Soft delete a player character (mark as inactive).
+
+- **GET /api/dm-characters** – Retrieve a list of all DM characters.
+- **GET /api/dm-characters/{id}** – Retrieve details of a specific DM character. (gRPC)
+- **POST /api/dm-characters** – Create a new DM character with basic info (name, race, class, etc.).
+- **PUT /api/dm-characters/{id}** – Update DM character details, including HP, conditions, vision capabilities, and movement speeds (walking, flying, swimming).
+- **DELETE /api/dm-characters/{id}** – Soft delete a DM character (mark as inactive).
 
 ### Inventory Endpoints
 
-- **GET /api/characters/{id}/inventory** – Retrieve the inventory for a specific character.
-- **POST /api/characters/{id}/inventory** – Add an item to a character's inventory.
-- **PUT /api/characters/{id}/inventory/{itemId}** – Update a specific item in the inventory (e.g., quantity, weight, shared status).
+- **GET /api/characters/{id}/inventory** – Retrieve the inventory for a specific character. (gRPC)
+- **POST /api/characters/{id}/inventory** – Add an item to a character's inventory. (gRPC)
+- **PUT /api/characters/{id}/inventory/{itemId}** – Update a specific item in the inventory (e.g., quantity, weight, shared status). (gRPC)
 - **DELETE /api/characters/{id}/inventory/{itemId}** – Soft delete an item from the inventory (mark as removed but keep it for record).
-- **GET /api/party/inventory** – Retrieve the shared inventory for the entire party.
-- **GET /api/party/overview** – Retrieve a summary of the party’s health, conditions, movement speeds, and shared inventory.
+- **GET /api/party/inventory** – Retrieve the shared inventory for the entire party. (gRPC)
+- **GET /api/party/overview** – Retrieve a summary of the party’s health, conditions, movement speeds, and shared inventory. (gRPC)
 
 ### File Management Endpoints
 
