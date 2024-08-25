@@ -1,5 +1,3 @@
-namespace Validators;
-
 public class DMCharacterValidator : AbstractValidator<DMCharacter>
 {
     public DMCharacterValidator()

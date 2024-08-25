@@ -23,30 +23,7 @@ builder.Host.UseSerilog();
 // ********** CONFIGURE SERVICES **********
 
 // 1. Firebase Admin SDK Configuration
-FirebaseApp.Create(new AppOptions()  // Credentials are stored in appsettings.json
-{
-    Credential = GoogleCredential.FromFile(builder.Configuration["Firebase:CredentialsPath"])
-});
-
-// Add Authorization and JWT Authentication
-builder.Services.AddAuthorization();
-
-// Configure JWT Authentication
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "https://securetoken.google.com/dnd-co"; // Your Firebase project ID
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = "https://securetoken.google.com/dnd-co", // Your Firebase project ID
-            ValidateAudience = true,
-            ValidAudience = "dnd-co", // Your Firebase project ID
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true
-        };
-    });
+// Current firebase was not working, deleted for now, will add back later
 
 // 2. Add Entity Framework Core services for MySQL
 // Register the DbContext for the application, specifying the MySQL connection string
@@ -62,13 +39,15 @@ builder.Services.AddScoped<IPlayerCharacterRepository, PlayerCharacterRepository
 builder.Services.AddScoped<IDMCharacterRepository, DMCharacterRepository>();
 builder.Services.AddScoped<IPlayerCharacterService, PlayerCharacterService>();
 builder.Services.AddScoped<IDMCharacterService, DMCharacterService>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 // 4. Add HTTP Client services
 // Register HTTP Client for external API integration
 builder.Services.AddHttpClient<Open5eApiService>();
 
 // 5. Add AutoMapper for DTO <-> Entity mapping
-builder.Services.AddAutoMapper(typeof(CharacterMappingProfile)); 
+builder.Services.AddAutoMapper(typeof(CharacterMappingProfile), typeof(InventoryMappingProfile)); 
 
 // 6. Add FluentValidation for Model and DTO Validation
 builder.Services.AddFluentValidationAutoValidation()
@@ -77,6 +56,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterValidator>()
 builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<InventoryItemDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<SharedInventoryDtoValidator>();
 
 // 7. Add API Versioning
 builder.Services.AddApiVersioning(options =>

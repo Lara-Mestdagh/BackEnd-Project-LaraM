@@ -1,5 +1,3 @@
-namespace Validators;
-
 public class PlayerCharacterValidator : AbstractValidator<PlayerCharacter>
 {
     public PlayerCharacterValidator()

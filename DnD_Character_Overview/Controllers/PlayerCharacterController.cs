@@ -7,7 +7,6 @@ namespace Controllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/player-characters")]
 [ApiVersion("2")]
-[Authorize]
 public class PlayerCharacterController : ControllerBase
 {
     // Services

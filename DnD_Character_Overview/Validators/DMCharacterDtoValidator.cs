@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace Validators;
 
 public class DMCharacterDtoValidator : AbstractValidator<DMCharacterDTO>

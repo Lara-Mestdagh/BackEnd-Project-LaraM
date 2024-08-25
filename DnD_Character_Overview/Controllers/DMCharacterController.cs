@@ -7,7 +7,6 @@ namespace Controllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/dm-characters")]
 [ApiVersion("2")]
-[Authorize]
 public class DMCharacterController : ControllerBase
 {
     // Service
