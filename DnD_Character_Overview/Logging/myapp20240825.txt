@@ -1,0 +1,358 @@
+2024-08-25 16:39:26.490 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:39:26.560 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:39:26.579 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:39:26.595 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:39:26.722 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:39:26.788 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:39:26.791 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:39:26.793 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:39:26.794 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:39:53.987 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:39:54.241 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:39:54.253 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:39:54.259 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:39:54.263 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:39:54.268 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 283.8008ms
+2024-08-25 16:40:05.345 +02:00 [INF] Application is shutting down...
+2024-08-25 16:45:35.029 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:45:35.094 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:45:35.118 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:45:35.131 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:45:35.261 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:45:35.321 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:45:35.323 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:45:35.325 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:45:35.326 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:45:43.110 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:45:43.365 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:45:43.378 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:45:43.385 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:45:43.392 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:45:43.402 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 292.2115ms
+2024-08-25 16:46:26.622 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:46:26.629 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:46:26.633 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:46:26.637 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:46:26.639 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:46:26.652 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 29.7357ms
+2024-08-25 16:48:12.612 +02:00 [INF] Application is shutting down...
+2024-08-25 16:48:19.787 +02:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:48:19.880 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:48:19.907 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:48:19.926 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:48:20.074 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:48:20.155 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:48:20.158 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:48:20.160 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:48:20.162 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:48:23.420 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:48:23.646 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:48:23.660 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:48:23.669 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:48:23.674 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:48:23.681 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 262.1656ms
+2024-08-25 16:48:55.074 +02:00 [INF] Application is shutting down...
+2024-08-25 16:49:00.657 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:49:00.718 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:49:00.742 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:49:00.762 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:49:00.866 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:49:00.921 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:49:00.923 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:49:00.925 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:49:00.926 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:49:03.049 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:49:03.136 +02:00 [INF] Received token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjExYzhiMmRmNGM1NTlkMjhjOWRlNWQ0MTAxNDFiMzBkOWUyYmNlM2IiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZG5kLWNvIiwiYXVkIjoiZG5kLWNvIiwiYXV0aF90aW1lIjoxNzI0NTk3MzMyLCJ1c2VyX2lkIjoieGJ3UzhCYWdTaGJyT2dIWU9zbTY5bzNXSFNNMiIsInN1YiI6Inhid1M4QmFnU2hick9nSFlPc202OW8zV0hTTTIiLCJpYXQiOjE3MjQ1OTczMzIsImV4cCI6MTcyNDYwMDkzMiwiZW1haWwiOiJsYXJhbWVzdGRhZ2gyMDAyQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJsYXJhbWVzdGRhZ2gyMDAyQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.AiWkWGR1z6tYvfBobMbwl1QaB7jqmFBOKTvj0K6VKfFofP8mD7O6Ful1ejrnZTIMk0oHG2Og2dUhuU1n-cWjADwVZMwdMtjRtC069u5dSrXoLn0HJ3ytscu1nFuiZSxoxqT1zxST4AHaDJoEDtG8GbShJp-26mmzUi5aLFSdd9dsm4Gi040nod4zxu4o4F_UFPvU4ir1ocfjObZVgMCROhNZ0sWgORIs0JMp7Rpc9969_24waeeWPV1Lh2_2avNF7h9Ep8J9LDCT9Sr9Uf8qF2p25cMrjnEGAeemJiEjIftbFS09ddVCIGGn0zkEv___rzaZwaJSSxn7O4CEXpQh1g
+2024-08-25 16:49:03.523 +02:00 [INF] Firebase token verified successfully for user: xbwS8BagShbrOgHYOsm69o3WHSM2
+2024-08-25 16:49:03.698 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:49:03.713 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:49:03.722 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:49:03.730 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:49:03.737 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 689.3485ms
+2024-08-25 16:52:17.690 +02:00 [INF] Application is shutting down...
+2024-08-25 16:52:43.387 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:52:43.462 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:52:43.489 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:52:43.507 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:52:43.604 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:52:43.658 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:52:43.660 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:52:43.662 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:52:43.665 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:52:46.778 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:52:46.799 +02:00 [INF] Received token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjExYzhiMmRmNGM1NTlkMjhjOWRlNWQ0MTAxNDFiMzBkOWUyYmNlM2IiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZG5kLWNvIiwiYXVkIjoiZG5kLWNvIiwiYXV0aF90aW1lIjoxNzI0NTk3NTk1LCJ1c2VyX2lkIjoieGJ3UzhCYWdTaGJyT2dIWU9zbTY5bzNXSFNNMiIsInN1YiI6Inhid1M4QmFnU2hick9nSFlPc202OW8zV0hTTTIiLCJpYXQiOjE3MjQ1OTc1OTUsImV4cCI6MTcyNDYwMTE5NSwiZW1haWwiOiJsYXJhbWVzdGRhZ2gyMDAyQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJsYXJhbWVzdGRhZ2gyMDAyQGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.Uc7Z9a6hMzZWFkiD3RjiUwSO9z8wGPaKeHZK1VdfV8lpkuwAT8bycJnPn1U3bnOT-x1VLzsPXbAaGljOEtPIrRNcPFXoKYYQwPefLosd__-7cYC8RRK2C8aJdBpZc8YggEHRImpCcTNVQJVM3bQkp71KSILtnV5e5-mN7F0oMIWcWZ9ovHijwFzohd5ba2-plhJZ_5SIBbjXD1XSzLZdMoAruPO9YAe4XswB3i4K9RSCdTQcB9lISlJfCGsEe7Fz9SIUad7UlCz7hwo40GgvV-TaMp_WAbyDqYOiRbOpRZj2b_vNFiBs8VIaNvW4dzpg3d0jNIClhbJaiLRaPV4p5Q
+2024-08-25 16:52:47.054 +02:00 [INF] Firebase token verified successfully for user: xbwS8BagShbrOgHYOsm69o3WHSM2
+2024-08-25 16:52:47.262 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:52:47.277 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:52:47.286 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:52:47.293 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:52:47.299 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 521.6181ms
+2024-08-25 16:55:20.296 +02:00 [INF] Application is shutting down...
+2024-08-25 16:55:26.652 +02:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:55:26.715 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:55:26.733 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:55:26.747 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:55:26.842 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:55:26.912 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:55:26.915 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:55:26.916 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:55:26.918 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:55:28.426 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:55:28.646 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:55:28.740 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:55:28.748 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:55:28.754 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:55:28.763 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 336.2532ms
+2024-08-25 16:57:37.811 +02:00 [INF] Application is shutting down...
+2024-08-25 16:57:43.315 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:57:43.382 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:57:43.406 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:57:43.428 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:57:43.527 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:57:43.573 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:57:43.576 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:57:43.577 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:57:43.578 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:57:45.554 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:57:45.783 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenInvalidSignatureException: IDX10506: Signature validation failed. The user defined 'Delegate' specified on TokenValidationParameters did not return a 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken', but returned a 'System.IdentityModel.Tokens.Jwt.JwtSecurityToken' when validating token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. If you are using ASP.NET Core 8 or later, see https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events for more details.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureUsingDelegates(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:57:45.797 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10506: Signature validation failed. The user defined 'Delegate' specified on TokenValidationParameters did not return a 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken', but returned a 'System.IdentityModel.Tokens.Jwt.JwtSecurityToken' when validating token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. If you are using ASP.NET Core 8 or later, see https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events for more details.
+2024-08-25 16:57:45.808 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:57:45.814 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:57:45.821 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 269.5945ms
+2024-08-25 16:58:01.909 +02:00 [INF] Application is shutting down...
+2024-08-25 16:58:31.204 +02:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:58:31.272 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 16:58:31.295 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 16:58:31.313 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 16:58:31.418 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 16:58:31.468 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 16:58:31.470 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 16:58:31.471 +02:00 [INF] Hosting environment: Development
+2024-08-25 16:58:31.472 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 16:58:33.748 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 16:58:34.018 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 16:58:34.034 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 16:58:34.045 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 16:58:34.051 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 16:58:34.059 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 310.3192ms
+2024-08-25 17:00:28.133 +02:00 [INF] Application is shutting down...
+2024-08-25 17:00:33.092 +02:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:00:33.163 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:00:33.186 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 17:00:33.202 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 17:00:33.300 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 17:00:33.398 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 17:00:33.405 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 17:00:33.408 +02:00 [INF] Hosting environment: Development
+2024-08-25 17:00:33.410 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 17:00:44.314 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 17:00:44.532 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 17:00:44.546 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 17:00:44.552 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 17:00:44.560 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 17:00:44.567 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 254.1574ms
+2024-08-25 17:00:49.276 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 17:00:49.282 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 17:00:49.285 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 17:00:49.297 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 17:00:49.299 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 17:00:49.310 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 26.1092ms
+2024-08-25 17:02:34.253 +02:00 [INF] Application is shutting down...
+2024-08-25 17:03:13.218 +02:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:03:13.304 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:03:13.338 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 17:03:13.364 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 17:03:13.507 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 17:03:13.580 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 17:03:13.583 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 17:03:13.585 +02:00 [INF] Hosting environment: Development
+2024-08-25 17:03:13.586 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 17:03:21.986 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 17:03:23.220 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 17:03:23.232 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 17:03:23.255 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 17:03:23.260 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 17:03:23.267 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 1283.0486ms
+2024-08-25 17:04:54.800 +02:00 [INF] Application is shutting down...
+2024-08-25 17:05:07.875 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:05:07.933 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:05:07.954 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 17:05:07.969 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 17:05:08.079 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 17:05:08.135 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 17:05:08.137 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 17:05:08.138 +02:00 [INF] Hosting environment: Development
+2024-08-25 17:05:08.140 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 17:05:36.375 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 17:05:37.713 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 17:05:37.724 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 17:05:37.734 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 17:05:37.738 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 17:05:37.744 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 1372.3212ms
+2024-08-25 17:05:55.506 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 17:05:55.512 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 17:05:55.515 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 17:05:55.518 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 17:05:55.520 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 17:05:55.528 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 16.4343ms
+2024-08-25 17:05:59.179 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 17:05:59.183 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 17:05:59.186 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 17:05:59.190 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 17:05:59.192 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 17:05:59.193 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 14.2941ms
+2024-08-25 17:07:48.204 +02:00 [INF] Application is shutting down...
+2024-08-25 17:12:41.564 +02:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:12:41.624 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 17:12:41.643 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 17:12:41.664 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 17:12:41.768 +02:00 [INF] User profile is available. Using 'C:\Users\Lara\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-08-25 17:12:41.852 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 17:12:41.856 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 17:12:41.858 +02:00 [INF] Hosting environment: Development
+2024-08-25 17:12:41.860 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 17:13:43.810 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - null null
+2024-08-25 17:13:45.342 +02:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2024-08-25 17:13:45.355 +02:00 [INF] Bearer was not authenticated. Failure message: IDX10500: Signature validation failed. No security keys were provided to validate the signature.
+2024-08-25 17:13:45.366 +02:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-08-25 17:13:45.371 +02:00 [INF] AuthenticationScheme: Bearer was challenged.
+2024-08-25 17:13:45.375 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/player-characters - 401 0 null 1566.7994ms

@@ -5,10 +5,24 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Firebase Admin SDK configuration
+// Create a Serilog logger and configure it to log to both the console and a file
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console() // Log to console
+    .WriteTo.File("Logging/myapp.txt", rollingInterval: RollingInterval.Day) // Log to file with daily rolling
+    .CreateLogger();
+
+// Replace the default .NET Core logger with Serilog
+builder.Host.UseSerilog(); 
+
+// ********** CONFIGURE SERVICES **********
+
+// 1. Firebase Admin SDK Configuration
 FirebaseApp.Create(new AppOptions()  // Credentials are stored in appsettings.json
 {
     Credential = GoogleCredential.FromFile(builder.Configuration["Firebase:CredentialsPath"])
@@ -17,6 +31,7 @@ FirebaseApp.Create(new AppOptions()  // Credentials are stored in appsettings.js
 // Add Authorization and JWT Authentication
 builder.Services.AddAuthorization();
 
+// Configure JWT Authentication
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -25,102 +40,116 @@ builder.Services
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
             ValidIssuer = "https://securetoken.google.com/dnd-co", // Your Firebase project ID
-            ValidAudience = "dnd-co" // Your Firebase project ID
+            ValidateAudience = true,
+            ValidAudience = "dnd-co", // Your Firebase project ID
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true
         };
     });
 
-// Add services to the container
-
-// Register HttpClient and Open5eApiService
-builder.Services.AddHttpClient<Open5eApiService>();
-
-// Register the repositories
-builder.Services.AddScoped<IPlayerCharacterRepository, PlayerCharacterRepository>();
-builder.Services.AddScoped<IDMCharacterRepository, DMCharacterRepository>();
-
-// Register the services
-builder.Services.AddScoped<IPlayerCharacterService, PlayerCharacterService>();
-builder.Services.AddScoped<IDMCharacterService, DMCharacterService>();
-
-// Register FluentValidation
-builder.Services.AddFluentValidationAutoValidation()
-                .AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterValidator>();
-
-// Register the JwtTokenGenerator
-builder.Services.AddSingleton<JwtTokenGenerator>();
-
-// Add services for Entity Framework Core
+// 2. Add Entity Framework Core services for MySQL
+// Register the DbContext for the application, specifying the MySQL connection string
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MySQLConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-// Add API Versioning
+// 3. Add Repositories and Services
+// Register application repositories and services for Dependency Injection (DI)
+builder.Services.AddScoped<IPlayerCharacterRepository, PlayerCharacterRepository>();
+builder.Services.AddScoped<IDMCharacterRepository, DMCharacterRepository>();
+builder.Services.AddScoped<IPlayerCharacterService, PlayerCharacterService>();
+builder.Services.AddScoped<IDMCharacterService, DMCharacterService>();
+
+// 4. Add HTTP Client services
+// Register HTTP Client for external API integration
+builder.Services.AddHttpClient<Open5eApiService>();
+
+// 5. Add AutoMapper for DTO <-> Entity mapping
+builder.Services.AddAutoMapper(typeof(CharacterMappingProfile)); 
+
+// 6. Add FluentValidation for Model and DTO Validation
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterDtoValidator>();
+
+// 7. Add API Versioning
 builder.Services.AddApiVersioning(options =>
 {
-    options.DefaultApiVersion = new ApiVersion(2, 0);  // Current version of the API
-    options.AssumeDefaultVersionWhenUnspecified = true;  // If no version is specified, use the default
-    options.ReportApiVersions = true;  // Report API versions supported for the response
+    options.DefaultApiVersion = new ApiVersion(2, 0);  // Set default API version
+    options.AssumeDefaultVersionWhenUnspecified = true;  // Use default version if none is specified
+    options.ReportApiVersions = true;  // Include supported versions in response headers
 });
 
-// Add Swagger services
+// 8. Add Swagger for API Documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Version = "v1",
+        Version = "v2",
         Title = "DnD Character Management API",
         Description = "An API to manage DnD characters and their inventories."
     });
 });
 
-// Add controllers and configure JSON serialization to use string enums
+// 9. Add Controllers with JSON Serialization Configuration
+// Configure controllers and JSON options
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
+// ********** BUILD APPLICATION **********
 
-
-// Build the application
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
+// ********** CONFIGURE MIDDLEWARE **********
 
-// Ensure the database and tables are created
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
-    // This will create the database if it doesn't exist and apply migrations if there are any
-    dbContext.Database.Migrate();
-}
+// 1. Exception Handling Middleware
+app.UseExceptionHandler("/error");
 
+// 2. Developer Tools (Swagger) for Development Environment
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Configure the HTTP request pipeline
-
-app.UseExceptionHandler("/error"); // You can set up a generic error handling endpoint
-
-// Use routing
+// 3. Routing Middleware
 app.UseRouting();
 
-// Map controllers
+// 4. Authentication and Authorization Middleware
+app.UseAuthentication();
+app.UseAuthorization();
+
+// 5. CORS (Optional)
+// Uncomment and configure if your frontend is hosted on a different domain
+// app.UseCors(policy => policy
+//     .AllowAnyOrigin()
+//     .AllowAnyMethod()
+
+// ********** ENSURE DATABASE IS UP TO DATE **********
+
+// Ensure the database is created and the latest migrations are applied
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
+
+// ********** MAP ENDPOINTS **********
+
+// Map all controller endpoints
 app.MapControllers();
 
-// Run the application
+// ********** RUN APPLICATION **********
+
+// Start the web application
 app.Run("http://localhost:5000/");

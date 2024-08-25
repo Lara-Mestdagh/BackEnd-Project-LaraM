@@ -40,8 +40,6 @@ public class PlayerCharacterService : IPlayerCharacterService
             throw new ArgumentNullException(nameof(playerCharacter), "PlayerCharacter cannot be null.");
         }
 
-        // Additional business logic or validation can be placed here
-
         await _repository.AddAsync(playerCharacter);
     }
 
@@ -76,7 +74,6 @@ public class PlayerCharacterService : IPlayerCharacterService
         await _repository.SoftDeleteAsync(id);
     }
 
-    // Check if a character exists
     public async Task<bool> ExistsAsync(int id)
     {
         if (id <= 0)

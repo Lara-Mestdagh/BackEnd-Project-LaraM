@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace Controllers;
 
@@ -11,23 +12,27 @@ public class DMCharacterController : ControllerBase
 {
     // Service
     private readonly IDMCharacterService _service;
+    private readonly IMapper _mapper;
 
     // Constructor
-    public DMCharacterController(IDMCharacterService service)
+    public DMCharacterController(IDMCharacterService service, IMapper mapper)
     {
         _service = service;
+        _mapper = mapper;
     }
 
     // GET: api/dm-characters
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<DMCharacter>>> GetCharacters()
+    public async Task<ActionResult<IEnumerable<DMCharacterDTO>>> GetCharacters()
     {
-        return Ok(await _service.GetAllAsync());
+        var characters = await _service.GetAllAsync();
+        var characterDTOs = _mapper.Map<IEnumerable<DMCharacterDTO>>(characters);
+        return Ok(characterDTOs);
     }
 
     // GET: api/dm-characters/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<DMCharacter>> GetCharacter(int id)
+    public async Task<ActionResult<DMCharacterDTO>> GetCharacter(int id)
     {
         var character = await _service.GetByIdAsync(id);
 
@@ -36,27 +41,36 @@ public class DMCharacterController : ControllerBase
             return NotFound();
         }
 
-        return character;
+        var characterDTO = _mapper.Map<DMCharacterDTO>(character);
+        return Ok(characterDTO);
     }
 
     // POST: api/dm-characters
     [HttpPost]
-    public async Task<ActionResult<DMCharacter>> CreateCharacter(DMCharacter dmCharacter)
+    public async Task<ActionResult<DMCharacterDTO>> CreateCharacter(DMCharacterDTO dmCharacterDTO)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var dmCharacter = _mapper.Map<DMCharacter>(dmCharacterDTO);
         await _service.AddAsync(dmCharacter);
 
-        return CreatedAtAction(nameof(GetCharacter), new { id = dmCharacter.Id }, dmCharacter);
+        var createdDMCharacterDTO = _mapper.Map<DMCharacterDTO>(dmCharacter);
+        return CreatedAtAction(nameof(GetCharacter), new { id = createdDMCharacterDTO.Id}, createdDMCharacterDTO );
     }
 
     // PUT: api/dm-characters/{id}
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCharacter(int id, DMCharacter dmCharacter)
+    public async Task<IActionResult> UpdateCharacter(int id, DMCharacterDTO dmCharacterDTO)
     {
-        if (id != dmCharacter.Id)
+        if (id != dmCharacterDTO.Id)
         {
             return BadRequest("Character ID mismatch.");
         }
 
+        var dmCharacter = _mapper.Map<DMCharacter>(dmCharacterDTO);
         await _service.UpdateAsync(dmCharacter);
 
         return NoContent();
