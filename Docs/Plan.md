@@ -86,9 +86,6 @@ Implement caching for frequently accessed data, like character lists and invento
 
 - **Data Cleanup Service** - To periodically clean up old or unnecessary data.
 
-- **Inventory Export Generation Service** - To handle the generation of inventory reports (CSV or PDF) asynchronously.
-
-
 ## Blazor UI
 
 ### Character Overview Page
