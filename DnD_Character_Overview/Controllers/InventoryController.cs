@@ -5,8 +5,7 @@ using AutoMapper;
 namespace Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/")]
-[ApiVersion("3")]
+[Route("api/{version:apiVersion}/")]
 public class InventoryController : ControllerBase
 {
     private readonly IInventoryService _inventoryService;

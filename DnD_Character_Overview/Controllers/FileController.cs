@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 namespace Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/files")]
-[ApiVersion("3")]
+[Route("api/{version:apiVersion}/files")]
 public class FileController : ControllerBase
 {
     private readonly IInventoryService _inventoryService;
@@ -39,9 +38,9 @@ public class FileController : ControllerBase
         try
         {
             // Generate a unique file name to prevent collisions
-            var uniqueFileName = Path.GetRandomFileName();
-            var fileExtension = Path.GetExtension(file.FileName);
-            var filePath = Path.Combine("Images", uniqueFileName + fileExtension);
+            var uniqueFileName = System.IO.Path.GetRandomFileName();
+            var fileExtension = System.IO.Path.GetExtension(file.FileName);
+            var filePath = System.IO.Path.Combine("Images", uniqueFileName + fileExtension);
 
             // Save the file to the server
             using (var stream = new FileStream(filePath, FileMode.Create))

@@ -5,8 +5,7 @@ using AutoMapper;
 namespace Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/dm-characters")]
-[ApiVersion("3")]
+[Route("api/{version:apiVersion}/dm-characters")]
 public class DMCharacterController : ControllerBase
 {
     // Service

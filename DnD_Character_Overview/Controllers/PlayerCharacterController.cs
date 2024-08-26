@@ -5,8 +5,7 @@ using AutoMapper;
 namespace Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/player-characters")]
-[ApiVersion("3")]
+[Route("api/{version:apiVersion}/player-characters")]
 public class PlayerCharacterController : ControllerBase
 {
     // Services

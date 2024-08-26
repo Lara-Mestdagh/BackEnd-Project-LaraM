@@ -8,7 +8,8 @@ global using Services;
 global using Repositories;
 global using Validators;
 global using DTOs;
-global using Configurations;
+global using Middleware;
+global using GraphQL;
 
 
 global using Open5e;
