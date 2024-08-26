@@ -62,7 +62,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<SharedInventoryDtoValidator
 // 7. Add API Versioning
 builder.Services.AddApiVersioning(options =>
 {
-    options.DefaultApiVersion = new ApiVersion(2, 0);  // Set default API version
+    options.DefaultApiVersion = new ApiVersion(3, 0);  // Set default API version
     options.AssumeDefaultVersionWhenUnspecified = true;  // Use default version if none is specified
     options.ReportApiVersions = true;  // Include supported versions in response headers
 });
@@ -71,9 +71,9 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v3", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        Version = "v2",
+        Version = "v3",
         Title = "DnD Character Management API",
         Description = "An API to manage DnD characters and their inventories."
     });

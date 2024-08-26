@@ -587,3 +587,162 @@ System.InvalidOperationException: The property 'InventoryItem.Id' is part of a k
 2024-08-25 19:51:08.928 +02:00 [INF] Executed endpoint 'Controllers.ErrorController.HandleError (DnD_CO)'
 2024-08-25 19:51:08.932 +02:00 [INF] Request finished HTTP/1.1 PUT http://localhost:5000/api/v2/characters/inventory/1/4 - 500 null application/problem+json; charset=utf-8 67.7209ms
 2024-08-25 19:54:52.766 +02:00 [INF] Application is shutting down...
+2024-08-25 20:07:12.881 +02:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 20:07:12.970 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='DnD_CO' AND TABLE_NAME='__EFMigrationsHistory';
+2024-08-25 20:07:12.999 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2024-08-25 20:07:13.027 +02:00 [INF] No migrations were applied. The database is already up to date.
+2024-08-25 20:07:13.628 +02:00 [INF] Now listening on: http://localhost:5000
+2024-08-25 20:07:13.737 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-08-25 20:07:13.751 +02:00 [INF] Hosting environment: Development
+2024-08-25 20:07:13.756 +02:00 [INF] Content root path: D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview
+2024-08-25 20:07:18.832 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/characters/inventory/1 - null null
+2024-08-25 20:07:18.864 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/characters/inventory/1 - 404 0 null 32.8199ms
+2024-08-25 20:07:18.873 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5000/api/v2/characters/inventory/1, Response status code: 404
+2024-08-25 20:07:39.566 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/characters/1/inventory - null null
+2024-08-25 20:07:39.575 +02:00 [INF] Executing endpoint 'Controllers.InventoryController.GetInventoryItemsForCharacter (DnD_CO)'
+2024-08-25 20:07:39.598 +02:00 [INF] Route matched with {action = "GetInventoryItemsForCharacter", controller = "Inventory"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetInventoryItemsForCharacter(Int32) on controller Controllers.InventoryController (DnD_CO).
+2024-08-25 20:07:40.041 +02:00 [INF] Executed DbCommand (39ms) [Parameters=[@__characterId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE (`i`.`PlayerCharacterId` = @__characterId_0) OR (`i`.`DMCharacterId` = @__characterId_0)
+2024-08-25 20:07:40.130 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DTOs.InventoryItemDTO, DnD_CO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-08-25 20:07:40.203 +02:00 [INF] Executed action Controllers.InventoryController.GetInventoryItemsForCharacter (DnD_CO) in 598.9732ms
+2024-08-25 20:07:40.205 +02:00 [INF] Executed endpoint 'Controllers.InventoryController.GetInventoryItemsForCharacter (DnD_CO)'
+2024-08-25 20:07:40.211 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/characters/1/inventory - 200 null application/json; charset=utf-8 645.5196ms
+2024-08-25 20:07:50.013 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/v2/characters/1/inventory - application/json 211
+2024-08-25 20:07:50.018 +02:00 [INF] Executing endpoint 'Controllers.InventoryController.AddInventoryItem (DnD_CO)'
+2024-08-25 20:07:50.024 +02:00 [INF] Route matched with {action = "AddInventoryItem", controller = "Inventory"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] AddInventoryItem(Int32, DTOs.InventoryItemDTO) on controller Controllers.InventoryController (DnD_CO).
+2024-08-25 20:07:50.302 +02:00 [INF] Executed DbCommand (13ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = 255), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Decimal), @p6='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `InventoryItems` (`DMCharacterId`, `ItemName`, `PlayerCharacterId`, `Quantity`, `SharedInventoryId`, `Weight`, `WeightUnit`)
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6);
+SELECT `Id`
+FROM `InventoryItems`
+WHERE ROW_COUNT() = 1 AND `Id` = LAST_INSERT_ID();
+2024-08-25 20:07:50.340 +02:00 [INF] Executing CreatedAtActionResult, writing value of type 'DTOs.InventoryItemDTO'.
+2024-08-25 20:07:50.360 +02:00 [INF] Executed action Controllers.InventoryController.AddInventoryItem (DnD_CO) in 333.0133ms
+2024-08-25 20:07:50.363 +02:00 [INF] Executed endpoint 'Controllers.InventoryController.AddInventoryItem (DnD_CO)'
+2024-08-25 20:07:50.365 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/api/v2/characters/1/inventory - 201 null application/json; charset=utf-8 352.0813ms
+2024-08-25 20:08:07.776 +02:00 [INF] Request starting HTTP/1.1 PUT http://localhost:5000/api/v2/characters/1/inventory/4 - application/json 208
+2024-08-25 20:08:07.779 +02:00 [INF] Executing endpoint 'Controllers.InventoryController.UpdateInventoryItem (DnD_CO)'
+2024-08-25 20:08:07.784 +02:00 [INF] Route matched with {action = "UpdateInventoryItem", controller = "Inventory"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateInventoryItem(Int32, Int32, DTOs.InventoryItemDTO) on controller Controllers.InventoryController (DnD_CO).
+2024-08-25 20:08:07.821 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__characterId_0='?' (DbType = Int32), @__itemId_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE ((`i`.`PlayerCharacterId` = @__characterId_0) OR (`i`.`DMCharacterId` = @__characterId_0)) AND (`i`.`Id` = @__itemId_1)
+LIMIT 1
+2024-08-25 20:08:07.839 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__item_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE `i`.`Id` = @__item_Id_0
+LIMIT 1
+2024-08-25 20:08:07.844 +02:00 [INF] Executed action Controllers.InventoryController.UpdateInventoryItem (DnD_CO) in 58.1994ms
+2024-08-25 20:08:07.847 +02:00 [INF] Executed endpoint 'Controllers.InventoryController.UpdateInventoryItem (DnD_CO)'
+2024-08-25 20:08:07.851 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Cannot update a non-existing item.
+   at Repositories.InventoryRepository.UpdateInventoryItemAsync(InventoryItem item) in D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview\Repositories\InventoryRepository.cs:line 60
+   at Services.InventoryService.UpdateInventoryItemAsync(InventoryItem item) in D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview\Services\InventoryService.cs:line 37
+   at Controllers.InventoryController.UpdateInventoryItem(Int32 characterId, Int32 itemId, InventoryItemDTO itemDto) in D:\Documents\MCT\Semester_4\Backend_Dev\Project\BD-Project-LaraM\DnD_Character_Overview\Controllers\InventoryController.cs:line 77
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2024-08-25 20:08:07.992 +02:00 [INF] Executing endpoint 'Controllers.ErrorController.HandleError (DnD_CO)'
+2024-08-25 20:08:07.995 +02:00 [INF] Route matched with {action = "HandleError", controller = "Error"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleError() on controller Controllers.ErrorController (DnD_CO).
+2024-08-25 20:08:08.001 +02:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2024-08-25 20:08:08.047 +02:00 [INF] Executed action Controllers.ErrorController.HandleError (DnD_CO) in 47.1273ms
+2024-08-25 20:08:08.050 +02:00 [INF] Executed endpoint 'Controllers.ErrorController.HandleError (DnD_CO)'
+2024-08-25 20:08:08.052 +02:00 [INF] Request finished HTTP/1.1 PUT http://localhost:5000/api/v2/characters/1/inventory/4 - 500 null application/problem+json; charset=utf-8 276.305ms
+2024-08-25 20:08:53.592 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/characters/1/inventory - null null
+2024-08-25 20:08:53.596 +02:00 [INF] Executing endpoint 'Controllers.InventoryController.GetInventoryItemsForCharacter (DnD_CO)'
+2024-08-25 20:08:53.598 +02:00 [INF] Route matched with {action = "GetInventoryItemsForCharacter", controller = "Inventory"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetInventoryItemsForCharacter(Int32) on controller Controllers.InventoryController (DnD_CO).
+2024-08-25 20:08:53.612 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__characterId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE (`i`.`PlayerCharacterId` = @__characterId_0) OR (`i`.`DMCharacterId` = @__characterId_0)
+2024-08-25 20:08:53.616 +02:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[DTOs.InventoryItemDTO, DnD_CO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-08-25 20:08:53.627 +02:00 [INF] Executed action Controllers.InventoryController.GetInventoryItemsForCharacter (DnD_CO) in 27.6788ms
+2024-08-25 20:08:53.631 +02:00 [INF] Executed endpoint 'Controllers.InventoryController.GetInventoryItemsForCharacter (DnD_CO)'
+2024-08-25 20:08:53.633 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/characters/1/inventory - 200 null application/json; charset=utf-8 40.3587ms
+2024-08-25 20:10:29.205 +02:00 [INF] Request starting HTTP/1.1 PUT http://localhost:5000/api/v2/characters/1/inventory/1 - application/json 190
+2024-08-25 20:10:29.210 +02:00 [INF] Executing endpoint 'Controllers.InventoryController.UpdateInventoryItem (DnD_CO)'
+2024-08-25 20:10:29.220 +02:00 [INF] Route matched with {action = "UpdateInventoryItem", controller = "Inventory"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateInventoryItem(Int32, Int32, DTOs.InventoryItemDTO) on controller Controllers.InventoryController (DnD_CO).
+2024-08-25 20:10:29.238 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__characterId_0='?' (DbType = Int32), @__itemId_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE ((`i`.`PlayerCharacterId` = @__characterId_0) OR (`i`.`DMCharacterId` = @__characterId_0)) AND (`i`.`Id` = @__itemId_1)
+LIMIT 1
+2024-08-25 20:10:29.246 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__item_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE `i`.`Id` = @__item_Id_0
+LIMIT 1
+2024-08-25 20:10:29.271 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[@p7='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (Size = 255), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Decimal), @p6='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+UPDATE `InventoryItems` SET `DMCharacterId` = @p0, `ItemName` = @p1, `PlayerCharacterId` = @p2, `Quantity` = @p3, `SharedInventoryId` = @p4, `Weight` = @p5, `WeightUnit` = @p6
+WHERE `Id` = @p7;
+SELECT ROW_COUNT();
+2024-08-25 20:10:29.284 +02:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2024-08-25 20:10:29.286 +02:00 [INF] Executed action Controllers.InventoryController.UpdateInventoryItem (DnD_CO) in 63.5688ms
+2024-08-25 20:10:29.289 +02:00 [INF] Executed endpoint 'Controllers.InventoryController.UpdateInventoryItem (DnD_CO)'
+2024-08-25 20:10:29.290 +02:00 [INF] Request finished HTTP/1.1 PUT http://localhost:5000/api/v2/characters/1/inventory/1 - 204 null null 85.687ms
+2024-08-25 20:10:50.823 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5000/api/v2/characters/inventory/5 - null null
+2024-08-25 20:10:50.826 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5000/api/v2/characters/inventory/5 - 404 0 null 3.3117ms
+2024-08-25 20:10:50.831 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: DELETE http://localhost:5000/api/v2/characters/inventory/5, Response status code: 404
+2024-08-25 20:11:05.297 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:5000/api/v2/characters/1/inventory/5 - null null
+2024-08-25 20:11:05.300 +02:00 [INF] Executing endpoint 'Controllers.InventoryController.DeleteInventoryItem (DnD_CO)'
+2024-08-25 20:11:05.305 +02:00 [INF] Route matched with {action = "DeleteInventoryItem", controller = "Inventory"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteInventoryItem(Int32, Int32) on controller Controllers.InventoryController (DnD_CO).
+2024-08-25 20:11:05.325 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[@__characterId_0='?' (DbType = Int32), @__itemId_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE ((`i`.`PlayerCharacterId` = @__characterId_0) OR (`i`.`DMCharacterId` = @__characterId_0)) AND (`i`.`Id` = @__itemId_1)
+LIMIT 1
+2024-08-25 20:11:05.333 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@__characterId_0='?' (DbType = Int32), @__itemId_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM `InventoryItems` AS `i`
+WHERE ((`i`.`PlayerCharacterId` = @__characterId_0) OR (`i`.`DMCharacterId` = @__characterId_0)) AND (`i`.`Id` = @__itemId_1)
+LIMIT 1
+2024-08-25 20:11:05.365 +02:00 [INF] Executed DbCommand (17ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SET AUTOCOMMIT = 1;
+DELETE FROM `InventoryItems`
+WHERE `Id` = @p0;
+SELECT ROW_COUNT();
+2024-08-25 20:11:05.373 +02:00 [INF] Executing StatusCodeResult, setting HTTP status code 204
+2024-08-25 20:11:05.374 +02:00 [INF] Executed action Controllers.InventoryController.DeleteInventoryItem (DnD_CO) in 65.1279ms
+2024-08-25 20:11:05.376 +02:00 [INF] Executed endpoint 'Controllers.InventoryController.DeleteInventoryItem (DnD_CO)'
+2024-08-25 20:11:05.379 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost:5000/api/v2/characters/1/inventory/5 - 204 null null 81.8468ms
+2024-08-25 20:12:46.612 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/party/inventory - null null
+2024-08-25 20:12:46.615 +02:00 [INF] Executing endpoint 'Controllers.InventoryController.GetSharedInventory (DnD_CO)'
+2024-08-25 20:12:46.619 +02:00 [INF] Route matched with {action = "GetSharedInventory", controller = "Inventory"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSharedInventory() on controller Controllers.InventoryController (DnD_CO).
+2024-08-25 20:12:46.671 +02:00 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2024-08-25 20:12:46.723 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `t`.`Id`, `i`.`Id`, `i`.`DMCharacterId`, `i`.`ItemName`, `i`.`PlayerCharacterId`, `i`.`Quantity`, `i`.`SharedInventoryId`, `i`.`Weight`, `i`.`WeightUnit`
+FROM (
+    SELECT `s`.`Id`
+    FROM `SharedInventory` AS `s`
+    LIMIT 1
+) AS `t`
+LEFT JOIN `InventoryItems` AS `i` ON `t`.`Id` = `i`.`SharedInventoryId`
+ORDER BY `t`.`Id`
+2024-08-25 20:12:46.743 +02:00 [INF] Executing OkObjectResult, writing value of type 'DTOs.SharedInventoryDTO'.
+2024-08-25 20:12:46.749 +02:00 [INF] Executed action Controllers.InventoryController.GetSharedInventory (DnD_CO) in 127.9752ms
+2024-08-25 20:12:46.751 +02:00 [INF] Executed endpoint 'Controllers.InventoryController.GetSharedInventory (DnD_CO)'
+2024-08-25 20:12:46.753 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/party/inventory - 200 null application/json; charset=utf-8 140.8023ms
+2024-08-25 20:12:52.207 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/v2/party/overview - null null
+2024-08-25 20:12:52.210 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/v2/party/overview - 404 0 null 3.011ms
+2024-08-25 20:12:52.215 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5000/api/v2/party/overview, Response status code: 404
