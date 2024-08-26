@@ -6,6 +6,11 @@ namespace Controllers;
 [Route("[controller]")]
 public class ErrorController : ControllerBase
 {
-    [Route("/error")]
-    public IActionResult HandleError() => Problem();
+    [HttpGet]
+    [Route("error")]
+    public IActionResult HandleError()
+    {
+        // Your error handling logic here
+        return Problem();
+    }
 }

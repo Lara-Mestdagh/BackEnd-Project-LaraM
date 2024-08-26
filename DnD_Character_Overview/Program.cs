@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,12 +70,15 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v3", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v3", new OpenApiInfo
     {
         Version = "v3",
         Title = "DnD Character Management API",
         Description = "An API to manage DnD characters and their inventories."
     });
+
+    // Register the file upload operation filter
+    // options.OperationFilter<FileUploadOperationFilter>(); // Add this line
 });
 
 // 9. Add Controllers with JSON Serialization Configuration
@@ -99,8 +101,13 @@ app.UseExceptionHandler("/error");
 // 2. Developer Tools (Swagger) for Development Environment
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v3/swagger.json", "DnD Character Management API v3"));
+}
+else
+{
+    app.UseExceptionHandler("/error"); // Your existing error handler
 }
 
 // 3. Routing Middleware

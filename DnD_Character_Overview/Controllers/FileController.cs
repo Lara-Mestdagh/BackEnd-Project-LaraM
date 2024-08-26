@@ -6,7 +6,7 @@ namespace Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/files")]
-[ApiVersion("2")]
+[ApiVersion("3")]
 public class FileController : ControllerBase
 {
     private readonly IInventoryService _inventoryService;
@@ -24,45 +24,59 @@ public class FileController : ControllerBase
 
     // POST /api/files/upload – Upload a character image.
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadCharacterImage([FromForm] IFormFile file, [FromForm] int characterId, [FromForm] string characterType)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UploadCharacterImage(
+        IFormFile file,
+        [FromForm] int characterId,
+        [FromForm] string characterType)
     {
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded.");
 
-        // Check if characterId and characterType are provided and valid
         if (characterId <= 0 || string.IsNullOrEmpty(characterType) || !(characterType == "player" || characterType == "dm"))
             return BadRequest("Invalid characterId or characterType.");
 
-        // Save the file to the server
-        var filePath = Path.Combine("Images", file.FileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        try
         {
-            await file.CopyToAsync(stream);
-        }
+            // Generate a unique file name to prevent collisions
+            var uniqueFileName = Path.GetRandomFileName();
+            var fileExtension = Path.GetExtension(file.FileName);
+            var filePath = Path.Combine("Images", uniqueFileName + fileExtension);
 
-        // Update the character's image path in the database
-        if (characterType == "player")
-        {
-            var character = await _playerCharacterService.GetByIdAsync(characterId);
-            if (character != null)
+            // Save the file to the server
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                character.ImagePath = filePath;
-                await _playerCharacterService.UpdateAsync(character);
+                await file.CopyToAsync(stream);
             }
-        }
-        else if (characterType == "dm")
-        {
-            var character = await _dmCharacterService.GetByIdAsync(characterId);
-            if (character != null)
-            {
-                character.ImagePath = filePath;
-                await _dmCharacterService.UpdateAsync(character);
-            }
-        }
 
-        return Ok(new { FilePath = filePath });
+            // Update the character's image path in the database
+            if (characterType == "player")
+            {
+                var character = await _playerCharacterService.GetByIdAsync(characterId);
+                if (character != null)
+                {
+                    character.ImagePath = filePath;
+                    await _playerCharacterService.UpdateAsync(character);
+                }
+            }
+            else if (characterType == "dm")
+            {
+                var character = await _dmCharacterService.GetByIdAsync(characterId);
+                if (character != null)
+                {
+                    character.ImagePath = filePath;
+                    await _dmCharacterService.UpdateAsync(character);
+                }
+            }
+
+            return Ok(new { FilePath = filePath });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred while uploading the file: {ex.Message}");
+        }
     }
+
 
     // GET /api/files/download/inventory/{characterId}/{format} – Download a character’s inventory in the specified format (CSV or PDF).
     [HttpGet("download/inventory/{characterId}/{format}")]

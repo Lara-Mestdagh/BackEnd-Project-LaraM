@@ -6,7 +6,7 @@ namespace Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/")]
-[ApiVersion("2")]
+[ApiVersion("3")]
 public class InventoryController : ControllerBase
 {
     private readonly IInventoryService _inventoryService;
