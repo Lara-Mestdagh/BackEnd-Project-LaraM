@@ -1,33 +1,56 @@
+using Microsoft.Extensions.Caching.Memory;
+
 namespace Services;
 
 public class PlayerCharacterService : IPlayerCharacterService
 {
-    // The repository is injected into the service
     private readonly IPlayerCharacterRepository _repository;
+    private readonly IMemoryCache _cache; 
+        private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30); 
 
     // Constructor
-    public PlayerCharacterService(IPlayerCharacterRepository repository)
+    public PlayerCharacterService(IPlayerCharacterRepository repository, IMemoryCache cache)
     {
         _repository = repository;
+        _cache = cache;
     }
 
     // API methods
     public async Task<IEnumerable<PlayerCharacter>> GetAllAsync()
     {
-        return await _repository.GetAllAsync();
+        var cacheKey = "AllPlayerCharacters";
+
+        if (!_cache.TryGetValue(cacheKey, out IEnumerable<PlayerCharacter>? characters) || characters == null)
+        {
+            characters = await _repository.GetAllAsync();
+            var cacheEntryOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = _cacheDuration
+            };
+
+            _cache.Set(cacheKey, characters, cacheEntryOptions);
+        }
+
+        return characters;
     }
 
     public async Task<PlayerCharacter> GetByIdAsync(int id)
     {
-        if (id <= 0)
-        {
-            throw new ArgumentException("Invalid character ID.", nameof(id));
-        }
+        var cacheKey = $"PlayerCharacter_{id}";
 
-        var character = await _repository.GetByIdAsync(id);
-        if (character == null)
+        if (!_cache.TryGetValue(cacheKey, out PlayerCharacter? character) || character == null)
         {
-            throw new KeyNotFoundException($"PlayerCharacter with ID {id} could not be found.");
+            character = await _repository.GetByIdAsync(id);
+
+            if (character != null)
+            {
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = _cacheDuration
+                };
+
+                _cache.Set(cacheKey, character, cacheEntryOptions);
+            }
         }
 
         return character;
@@ -56,6 +79,10 @@ public class PlayerCharacterService : IPlayerCharacterService
         }
 
         await _repository.UpdateAsync(playerCharacter);
+
+        // Invalidate the cache for the updated item
+        var cacheKey = $"PlayerCharacter_{playerCharacter.Id}";
+        _cache.Remove(cacheKey);
     }
 
     public async Task SoftDeleteAsync(int id)
@@ -72,6 +99,10 @@ public class PlayerCharacterService : IPlayerCharacterService
         }
 
         await _repository.SoftDeleteAsync(id);
+
+        // Invalidate the cache for the deleted item
+        var cacheKey = $"PlayerCharacter_{id}";
+        _cache.Remove(cacheKey);
     }
 
     public async Task<bool> ExistsAsync(int id)

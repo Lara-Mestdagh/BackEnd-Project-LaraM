@@ -37,6 +37,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 // 2. Add Repositories and Services
+// Add memory cache services
+builder.Services.AddMemoryCache();
 // Register application repositories and services for Dependency Injection (DI)
 builder.Services.AddScoped<IPlayerCharacterRepository, PlayerCharacterRepository>();
 builder.Services.AddScoped<IDMCharacterRepository, DMCharacterRepository>();
@@ -117,6 +119,9 @@ builder.Services.AddSwaggerGen(options =>
         Title = "DnD Character Management API",
         Description = "An API to manage DnD characters and their inventories."
     });
+
+    // Register the custom operation filter
+    options.OperationFilter<AddStaticHeaderOperationFilter>();
 });
 
 // 8. Add Controllers with JSON Serialization Configuration
