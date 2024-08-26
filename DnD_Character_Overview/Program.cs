@@ -47,6 +47,10 @@ builder.Services.AddScoped<IDMCharacterService, DMCharacterService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 
+// Register background services
+builder.Services.AddHostedService<CharacterStatusMonitoringService>();
+builder.Services.AddHostedService<DataCleanupService>();
+
 // Configure services for HotChocolate GraphQL
 builder.Services
     .AddGraphQLServer()

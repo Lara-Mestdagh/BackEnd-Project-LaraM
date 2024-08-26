@@ -64,6 +64,8 @@ public class DMCharacterService : IDMCharacterService
         }
 
         await _repository.AddAsync(dmCharacter);
+        // Invalidate cache for the collection to ensure the new character appears in future queries
+        _cache.Remove("AllDMCharacters");
     }
 
     public async Task UpdateAsync(DMCharacter dmCharacter)
@@ -80,9 +82,10 @@ public class DMCharacterService : IDMCharacterService
 
         await _repository.UpdateAsync(dmCharacter);
 
-        // Invalidate the cache for the updated item
+        // Invalidate the cache for both specific item and all items
         var cacheKey = $"DMCharacter_{dmCharacter.Id}";
         _cache.Remove(cacheKey);
+        _cache.Remove("AllDMCharacters");
     }
 
     public async Task SoftDeleteAsync(int id)
@@ -100,9 +103,10 @@ public class DMCharacterService : IDMCharacterService
 
         await _repository.SoftDeleteAsync(id);
 
-        // Invalidate the cache for the deleted item
+        // Invalidate the cache for both specific item and all items
         var cacheKey = $"DMCharacter_{id}";
         _cache.Remove(cacheKey);
+        _cache.Remove("AllDMCharacters");
     }
 
     // Check if a DM character exists

@@ -8,4 +8,5 @@ public interface IPlayerCharacterRepository
     Task UpdateAsync(PlayerCharacter playerCharacter);
     Task SoftDeleteAsync(int id);
     Task<bool> ExistsAsync(int id);
+    Task CleanupSoftDeletedAsync();
 }

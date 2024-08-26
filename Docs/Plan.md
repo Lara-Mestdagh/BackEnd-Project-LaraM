@@ -82,7 +82,12 @@ Implement caching for frequently accessed data, like character lists and invento
 
 ### Background Services
 
-Utilize background tasks for any operations that might require more time, such as generating inventory reports.
+- **Character Status Monitoring Service** - To monitor the health and conditions of characters continuously.
+
+- **Data Cleanup Service** - To periodically clean up old or unnecessary data.
+
+- **Inventory Export Generation Service** - To handle the generation of inventory reports (CSV or PDF) asynchronously.
+
 
 ## Blazor UI
 

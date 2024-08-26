@@ -64,6 +64,9 @@ public class PlayerCharacterService : IPlayerCharacterService
         }
 
         await _repository.AddAsync(playerCharacter);
+
+        // Invalidate cache for "AllPlayerCharacters" to ensure it is refreshed
+        _cache.Remove("AllPlayerCharacters");
     }
 
     public async Task UpdateAsync(PlayerCharacter playerCharacter)
@@ -80,9 +83,10 @@ public class PlayerCharacterService : IPlayerCharacterService
 
         await _repository.UpdateAsync(playerCharacter);
 
-        // Invalidate the cache for the updated item
+        // Invalidate the cache for both specific item and all items
         var cacheKey = $"PlayerCharacter_{playerCharacter.Id}";
         _cache.Remove(cacheKey);
+        _cache.Remove("AllPlayerCharacters");
     }
 
     public async Task SoftDeleteAsync(int id)
@@ -100,9 +104,10 @@ public class PlayerCharacterService : IPlayerCharacterService
 
         await _repository.SoftDeleteAsync(id);
 
-        // Invalidate the cache for the deleted item
+        // Invalidate cache for both specific item and all items
         var cacheKey = $"PlayerCharacter_{id}";
         _cache.Remove(cacheKey);
+        _cache.Remove("AllPlayerCharacters");
     }
 
     public async Task<bool> ExistsAsync(int id)

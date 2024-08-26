@@ -8,4 +8,5 @@ public interface IDMCharacterRepository
     Task UpdateAsync(DMCharacter dmCharacter);
     Task SoftDeleteAsync(int id);
     Task<bool> ExistsAsync(int id);
+    Task CleanupSoftDeletedAsync();
 }

@@ -69,4 +69,25 @@ public class DMCharacterRepository : IDMCharacterRepository
     {
         return await _context.DMCharacters.AnyAsync(e => e.Id == id);
     }
+
+    public async Task CleanupSoftDeletedAsync()
+    {
+        // Fetch all characters marked as soft deleted aka isAlive = false
+        var characters = await _context.DMCharacters
+            .Where(dmc => dmc.IsAlive == false)
+            .ToListAsync();
+
+        if (characters.Any())
+        {
+            _context.DMCharacters.RemoveRange(characters);
+            await _context.SaveChangesAsync();
+
+            // Log the cleanup
+            Console.WriteLine($"Soft deleted characters cleanup completed. {characters.Count} characters removed.");
+        }
+        else
+        {
+            Console.WriteLine("No soft-deleted characters found for cleanup.");
+        }
+    }
 }
