@@ -12,9 +12,26 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-
+using Protos;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Kestrel to listen on both HTTP (5000) and HTTPS (5001)
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // Listen on HTTP for REST APIs on port 5000
+    options.ListenLocalhost(5000, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1; // HTTP/1.1 only
+    });
+
+    // Listen on HTTPS for gRPC and REST APIs on port 5001
+    options.ListenLocalhost(5001, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2; // HTTP/1.1 and HTTP/2
+        listenOptions.UseHttps(); // Enable HTTPS
+    });
+});
 
 // Create a Serilog logger and configure it to log to both the console and a file
 Log.Logger = new LoggerConfiguration()
@@ -45,7 +62,7 @@ builder.Services.AddScoped<IDMCharacterRepository, DMCharacterRepository>();
 builder.Services.AddScoped<IPlayerCharacterService, PlayerCharacterService>();
 builder.Services.AddScoped<IDMCharacterService, DMCharacterService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IInventoryService, Services.InventoryService>();
 
 // Register background services
 builder.Services.AddHostedService<CharacterStatusMonitoringService>();
@@ -82,15 +99,14 @@ builder.Services.AddApiVersioning(options =>
     // Check if the API version is not null or empty and starts with 'v'
     if (!string.IsNullOrEmpty(apiVersion) && apiVersion.StartsWith("v", StringComparison.OrdinalIgnoreCase))
     {
-        // Remove the 'v' prefix and split by the '.' to separate major and minor versions
-        var versionNumber = apiVersion.Substring(1); // This will get "4" from "v4" or "4.1" from "v4.1"
+        // Remove theprefix and split by the '.'
+        var versionNumber = apiVersion.Substring(1); 
         var versionParts = versionNumber.Split('.'); // Split the version number to handle minor version if exists
 
-        if (int.TryParse(versionParts[0], out var majorVersion)) // Parse the major version
+        if (int.TryParse(versionParts[0], out var majorVersion)) 
         {
             int minorVersion = 0; // Default minor version
 
-            // If there is a minor version, parse it
             if (versionParts.Length > 1 && int.TryParse(versionParts[1], out var parsedMinorVersion))
             {
                 minorVersion = parsedMinorVersion; // Set parsed minor version
@@ -152,11 +168,17 @@ builder.Services.AddCors(options =>
     });
 });
 
+// ** 10. Add gRPC Services **
+builder.Services.AddGrpc();
+
 // ********** BUILD APPLICATION **********
 
 var app = builder.Build();
 
 // ********** CONFIGURE MIDDLEWARE **********
+
+// HTTPS Redirection Middleware
+app.UseHttpsRedirection();
 
 // 1. Exception Handling Middleware
 // Global error handling to capture exceptions and return standardized responses
@@ -193,10 +215,20 @@ using (var scope = app.Services.CreateScope())
 // Map all controller endpoints
 app.MapControllers();
 
+// Map gRPC endpoints
+app.MapGrpcService<CharacterServiceImpl>();
+app.MapGrpcService<InventoryServiceImpl>();
+
+// Add a generic route handler for unknown gRPC endpoints
+app.MapGet("/", async context =>
+{
+    await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client.");
+});
+
 // GraphQL endpoint
 app.MapGraphQL($"/api/{apiVersion}/graphql");
 
 // ********** RUN APPLICATION **********
 
 // Start the web application
-app.Run("http://localhost:5000/");
+app.Run();

@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option csharp_namespace = "Protos";
+
+// Service definition for characters.
+service CharacterService {
+  rpc GetCharacter (GetCharacterRequest) returns (CharacterResponse);
+  rpc GetAllCharacters (EmptyRequest) returns (CharacterListResponse);
+}
+
+// Common request and response messages.
+message EmptyRequest {}
+
+message Character {
+    int32 id = 1;
+    string name = 2;
+    string race = 3;
+    string player_name = 4;
+    string image_path = 5;
+    int32 strength = 6;
+    int32 dexterity = 7;
+    int32 constitution = 8;
+    int32 intelligence = 9;
+    int32 wisdom = 10;
+    int32 charisma = 11;
+    int32 max_hp = 12;
+    int32 current_hp = 13;
+    int32 temp_hp = 14;
+    int32 armor_class = 15;
+    int32 walking_speed = 16;
+    int32 flying_speed = 17;
+    int32 swimming_speed = 18;
+    int32 darkvision_range = 19;
+    int32 initiative_modifier = 20;
+    repeated string resistances = 21;
+    repeated string weaknesses = 22;
+    string conditions = 23;
+    bool is_alive = 24;
+    bool has_over20_stats = 25;
+    repeated string known_languages = 26;
+    repeated CharacterClass character_classes = 27;
+}
+
+message CharacterListResponse {
+    repeated Character characters = 1;
+}
+  
+message GetCharacterRequest {
+    int32 character_id = 1;
+}
+  
+message CharacterResponse {
+    Character character = 1;
+}
+  
+  message CharacterClass {
+    int32 id = 1;
+    string name = 2;
+    int32 level = 3;
+}

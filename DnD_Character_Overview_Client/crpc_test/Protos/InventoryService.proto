@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+option csharp_namespace = "Protos";
+
+// Service definition for inventory.
+// Service definition for inventory.
+service InventoryService {
+    rpc GetInventoryItems (GetInventoryItemsRequest) returns (InventoryItemsResponse);
+    rpc GetInventoryItemById (GetInventoryItemByIdRequest) returns (InventoryItemResponse);
+    rpc AddInventoryItem (AddInventoryItemRequest) returns (AddInventoryItemResponse);
+    rpc UpdateInventoryItem (UpdateInventoryItemRequest) returns (UpdateInventoryItemResponse);
+    rpc DeleteInventoryItem (DeleteInventoryItemRequest) returns (DeleteInventoryItemResponse);
+}
+
+// Existing message definition
+message InventoryItem {
+    int32 id = 1;
+    int32 player_character_id = 2;
+    int32 dm_character_id = 3;
+    int32 shared_inventory_id = 4;
+    string name = 5;
+    int32 quantity = 6;
+    float weight = 7;
+    string weight_unit = 8;
+}
+
+// Add missing message definitions
+message GetInventoryItemsRequest {
+    int32 character_id = 1;
+}
+
+message InventoryItemsResponse {
+    repeated InventoryItem items = 1;
+}
+
+message GetInventoryItemByIdRequest {
+    int32 character_id = 1;
+    int32 item_id = 2;
+}
+
+message InventoryItemResponse {
+    InventoryItem item = 1;
+}
+
+message AddInventoryItemRequest {
+    InventoryItem item = 1;
+}
+
+message AddInventoryItemResponse {
+    bool success = 1;
+}
+
+message UpdateInventoryItemRequest {
+    InventoryItem item = 1;
+}
+
+message UpdateInventoryItemResponse {
+    bool success = 1;
+}
+
+message DeleteInventoryItemRequest {
+    int32 character_id = 1;
+    int32 item_id = 2;
+}
+
+message DeleteInventoryItemResponse {
+    bool success = 1;
+}

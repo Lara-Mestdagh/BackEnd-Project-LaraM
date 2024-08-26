@@ -38,13 +38,17 @@ public class InventoryService : IInventoryService
     }
 
     // Delete an inventory item from a character or shared inventory
-    public async Task DeleteInventoryItemAsync(int characterId, int itemId)
+    public async Task<bool> DeleteInventoryItemAsync(int characterId, int itemId)
     {
         var item = await _repository.GetInventoryItemByIdAsync(characterId, itemId);
+        
         if (item != null)
         {
             await _repository.DeleteInventoryItemAsync(item);
+            return true;  // Return true to indicate the item was successfully deleted
         }
+        
+        return false;  // Return false to indicate the item was not found and thus not deleted
     }
 
     // Retrieve the shared inventory

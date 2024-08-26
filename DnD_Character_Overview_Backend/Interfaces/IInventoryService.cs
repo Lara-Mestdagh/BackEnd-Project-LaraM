@@ -6,7 +6,7 @@ public interface IInventoryService
     Task<InventoryItem> GetInventoryItemByIdAsync(int characterId, int itemId);
     Task AddInventoryItemAsync(InventoryItem item);
     Task UpdateInventoryItemAsync(InventoryItem item);
-    Task DeleteInventoryItemAsync(int characterId, int itemId);
+    Task<bool> DeleteInventoryItemAsync(int characterId, int itemId);
 
     Task<SharedInventory> GetSharedInventoryAsync();
     Task UpdateSharedInventoryAsync(SharedInventory sharedInventory);

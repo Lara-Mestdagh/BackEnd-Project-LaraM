@@ -81,13 +81,14 @@ public class InventoryController : ControllerBase
     [HttpDelete("characters/{characterId}/inventory/{itemId}")]
     public async Task<IActionResult> DeleteInventoryItem(int characterId, int itemId)
     {
-        var existingItem = await _inventoryService.GetInventoryItemByIdAsync(characterId, itemId);
-        if (existingItem == null)
+        // Call the service method and check if the item exists and was deleted
+        bool success = await _inventoryService.DeleteInventoryItemAsync(characterId, itemId);
+        
+        if (!success)
         {
             return NotFound("Inventory item not found.");
         }
 
-        await _inventoryService.DeleteInventoryItemAsync(characterId, itemId);
         return NoContent();
     }
 
