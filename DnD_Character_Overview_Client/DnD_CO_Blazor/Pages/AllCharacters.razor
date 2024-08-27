@@ -1,0 +1,53 @@
+@page "/all-characters"
+
+<h3>All Characters</h3>
+
+<p>Manage all characters here, including Player and DM characters.</p>
+
+<button class="btn btn-primary" @onclick="AddCharacter">Add New Character</button>
+
+<div>
+    <h4>Characters List</h4>
+    @* A placeholder for characters management *@
+    <ul>
+        @foreach (var character in characters)
+        {
+            <li>
+                @character.Name 
+                (<span class="text-muted">@character.Type</span>)
+                <button class="btn btn-sm btn-secondary" @onclick="() => EditCharacter(character)">Edit</button>
+                <button class="btn btn-sm btn-danger" @onclick="() => DeleteCharacter(character)">Delete</button>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    private List<Character> characters = new List<Character>
+    {
+        new Character { Name = "Gandalf", Type = "DM Character" },
+        new Character { Name = "Frodo", Type = "Player Character" },
+    };
+
+    public class Character
+    {
+        public string Name { get; set; } = string.Empty;  // Initialize with a default value
+        public string Type { get; set; } = string.Empty;  // Initialize with a default value
+    }
+
+    private void AddCharacter()
+    {
+        // Logic for adding a new character (e.g., show a form or modal)
+    }
+
+    private void EditCharacter(Character character)
+    {
+        // Logic for editing a character (e.g., show a form or modal pre-filled with character data)
+    }
+
+    private void DeleteCharacter(Character character)
+    {
+        // Logic for deleting a character
+        characters.Remove(character);
+    }
+}

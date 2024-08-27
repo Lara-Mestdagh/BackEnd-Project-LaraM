@@ -1,17 +1,22 @@
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
 
 namespace Services;
 
 public class PlayerCharacterService : IPlayerCharacterService
 {
     private readonly IPlayerCharacterRepository _repository;
+    private readonly ICharacterClassRepository _classRepository;
     private readonly IMemoryCache _cache; 
-        private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30); 
+    private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30); 
 
     // Constructor
-    public PlayerCharacterService(IPlayerCharacterRepository repository, IMemoryCache cache)
+    public PlayerCharacterService(IPlayerCharacterRepository repository, ICharacterClassRepository classRepository, IMemoryCache cache)
     {
         _repository = repository;
+        _classRepository = classRepository;
         _cache = cache;
     }
 
@@ -23,6 +28,13 @@ public class PlayerCharacterService : IPlayerCharacterService
         if (!_cache.TryGetValue(cacheKey, out IEnumerable<PlayerCharacter>? characters) || characters == null)
         {
             characters = await _repository.GetAllAsync();
+            
+            // Fetch and include character classes for each character
+            foreach (var character in characters)
+            {
+                character.CharacterClasses = (await _classRepository.GetClassesByCharacterIdAsync(character.Id)).ToList();
+            }
+
             var cacheEntryOptions = new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = _cacheDuration
@@ -44,6 +56,9 @@ public class PlayerCharacterService : IPlayerCharacterService
 
             if (character != null)
             {
+                // Fetch and include character classes for the specific character
+                character.CharacterClasses = (await _classRepository.GetClassesByCharacterIdAsync(character.Id)).ToList();
+
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = _cacheDuration
@@ -65,6 +80,12 @@ public class PlayerCharacterService : IPlayerCharacterService
 
         await _repository.AddAsync(playerCharacter);
 
+        // Optionally add classes to CharacterClassRepository if provided
+        if (playerCharacter.CharacterClasses != null && playerCharacter.CharacterClasses.Any())
+        {
+            await _classRepository.AddClassesAsync(playerCharacter.Id, playerCharacter.CharacterClasses);
+        }
+
         // Invalidate cache for "AllPlayerCharacters" to ensure it is refreshed
         _cache.Remove("AllPlayerCharacters");
     }
@@ -82,6 +103,12 @@ public class PlayerCharacterService : IPlayerCharacterService
         }
 
         await _repository.UpdateAsync(playerCharacter);
+
+        // Optionally update classes in CharacterClassRepository if provided
+        if (playerCharacter.CharacterClasses != null && playerCharacter.CharacterClasses.Any())
+        {
+            await _classRepository.UpdateClassesAsync(playerCharacter.Id, playerCharacter.CharacterClasses);
+        }
 
         // Invalidate the cache for both specific item and all items
         var cacheKey = $"PlayerCharacter_{playerCharacter.Id}";

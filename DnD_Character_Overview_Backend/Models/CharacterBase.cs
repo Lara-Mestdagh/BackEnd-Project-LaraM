@@ -87,7 +87,6 @@ public abstract class CharacterBase
     public List<Languages> KnownLanguages { get; set; } = new List<Languages>(); // Languages known by the character
 
     // Relationships
-    public ICollection<CharacterClass>? CharacterClasses { get; set; } // Character's class(es)
     public ICollection<InventoryItem>? InventoryItems { get; set; } // Inventory items
 
     // Constructor

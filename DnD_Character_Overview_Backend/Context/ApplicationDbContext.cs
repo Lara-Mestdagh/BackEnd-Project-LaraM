@@ -17,8 +17,18 @@ public class ApplicationDbContext : DbContext
     // DbSet properties for each model
     public DbSet<PlayerCharacter> PlayerCharacters { get; set; }
     public DbSet<DMCharacter> DMCharacters { get; set; }
+    public DbSet<CharacterClass> CharacterClasses { get; set; }
     public DbSet<InventoryItem> InventoryItems { get; set; }
     public DbSet<SharedInventory> SharedInventory { get; set; }
+
+    // Override for OnConfiguring to enable sensitive data logging
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+    }
 
     // Override for OnModelCreating to configure relationships
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -102,6 +112,18 @@ public class ApplicationDbContext : DbContext
             .Property(e => e.Conditions)
             .HasConversion(conditionsConverter)
             .Metadata.SetValueComparer(conditionsComparer);
+
+        // Configuration for PlayerCharacter to have multiple CharacterClasses
+        modelBuilder.Entity<PlayerCharacter>()
+            .HasMany(pc => pc.CharacterClasses)
+            .WithOne(cc => cc.PlayerCharacter)
+            .HasForeignKey(cc => cc.PlayerCharacterId);
+
+        // Configuration for DMCharacter to have multiple CharacterClasses
+        modelBuilder.Entity<DMCharacter>()
+            .HasMany(dm => dm.CharacterClasses)
+            .WithOne(cc => cc.DMCharacter)
+            .HasForeignKey(cc => cc.DMCharacterId);
 
         // Configuration for SharedInventory as a singleton
         modelBuilder.Entity<SharedInventory>()

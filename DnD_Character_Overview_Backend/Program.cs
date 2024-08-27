@@ -57,6 +57,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add memory cache services
 builder.Services.AddMemoryCache();
 // Register application repositories and services for Dependency Injection (DI)
+builder.Services.AddScoped<ICharacterClassRepository, CharacterClassRepository>();
 builder.Services.AddScoped<IPlayerCharacterRepository, PlayerCharacterRepository>();
 builder.Services.AddScoped<IDMCharacterRepository, DMCharacterRepository>();
 builder.Services.AddScoped<IPlayerCharacterService, PlayerCharacterService>();
@@ -84,11 +85,12 @@ builder.Services.AddAutoMapper(typeof(CharacterMappingProfile), typeof(Inventory
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<PlayerCharacterDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<DMCharacterDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<InventoryItemDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<SharedInventoryDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CharacterClassDtoValidator>();
 
 // 6. Add API Versioning
 // Read the API version from appsettings.json

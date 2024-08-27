@@ -11,6 +11,8 @@ Images/
 Logging/
 Migrations/
 
+DnD_Character_Overview_Tests/*.js
+
 
 # User-specific files
 *.rsuser

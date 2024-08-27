@@ -8,9 +8,11 @@ public class CharacterClass
     [Key]
     public int Id { get; set; }
 
-    [Required]
     [ForeignKey("PlayerCharacter")]
-    public int PlayerCharacterId { get; set; }
+    public int? PlayerCharacterId { get; set; }  // Nullable to allow either PlayerCharacter or DMCharacter
+
+    [ForeignKey("DMCharacter")]
+    public int? DMCharacterId { get; set; }  // Nullable to allow either PlayerCharacter or DMCharacter
 
     [Required]
     [StringLength(255)]
@@ -20,6 +22,7 @@ public class CharacterClass
     public int Level { get; set; }
 
     public PlayerCharacter? PlayerCharacter { get; set; }
+    public DMCharacter? DMCharacter { get; set; }  // Add this property
 }
 
 // Since multi-classing is an option, 

@@ -33,7 +33,7 @@ public class DMCharacterDTO
     public List<string> Resistances { get; set; } = new List<string>();
     public List<string> Weaknesses { get; set; } = new List<string>();
 
-    public string? Conditions { get; set; }
+    public List<string> Conditions { get; set; } = new List<string>();
 
     public bool IsAlive { get; set; }
     public bool HasOver20Stats { get; set; }

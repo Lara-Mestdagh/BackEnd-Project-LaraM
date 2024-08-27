@@ -10,6 +10,7 @@ public static class ModelBuilderExtensions
     {
         SeedPlayerCharacters(modelBuilder);
         SeedDMCharacters(modelBuilder);
+        SeedCharacterClasses(modelBuilder);
         SeedInventoryItems(modelBuilder);
     }
 
@@ -159,6 +160,21 @@ public static class ModelBuilderExtensions
                 LegendaryActions = "Arcane Barrage, Teleport",
                 SpecialAbilities = "Truesight, Spellcasting"
             }
+        );
+    }
+
+    private static void SeedCharacterClasses(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CharacterClass>().HasData(
+            // Classes for Player Characters
+            new CharacterClass { Id = 1, PlayerCharacterId = 1, DMCharacterId = null, ClassName = "Warrior", Level = 3 },
+            new CharacterClass { Id = 2, PlayerCharacterId = 2, DMCharacterId = null, ClassName = "Mage", Level = 4 },
+            new CharacterClass { Id = 3, PlayerCharacterId = 3, DMCharacterId = null, ClassName = "Paladin", Level = 5 },
+            new CharacterClass { Id = 4, PlayerCharacterId = 4, DMCharacterId = null, ClassName = "Ranger", Level = 4 },
+            
+            // Ensure that DM Characters have unique IDs as well
+            new CharacterClass { Id = 5, PlayerCharacterId = null, DMCharacterId = 1, ClassName = "Barbarian", Level = 6 },
+            new CharacterClass { Id = 6, PlayerCharacterId = null, DMCharacterId = 2, ClassName = "Wizard", Level = 7 }
         );
     }
 

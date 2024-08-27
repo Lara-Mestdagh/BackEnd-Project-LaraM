@@ -4,6 +4,8 @@ public class DMCharacter : CharacterBase
 {
     public string? Description { get; set; } // Additional description for the character
 
+    public ICollection<CharacterClass>? CharacterClasses { get; set; } // Character's class(es)
+
     // Special abilities and actions
     public string? LegendaryActions { get; set; } // Legendary actions for powerful NPCs or monsters
     public string? SpecialAbilities { get; set; } // Special abilities for the character

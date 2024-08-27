@@ -33,7 +33,7 @@ public class PlayerCharacterDTO
     public List<string> Resistances { get; set; } = new List<string>();
     public List<string> Weaknesses { get; set; } = new List<string>();
 
-    public string? Conditions { get; set; }
+    public List<string> Conditions { get; set; } = new List<string>();
 
     public bool IsAlive { get; set; }
     public bool HasOver20Stats { get; set; }
@@ -45,5 +45,4 @@ public class PlayerCharacterDTO
 
     // Optional properties related to character classes and inventory
     public ICollection<CharacterClassDTO> CharacterClasses { get; set; } = new List<CharacterClassDTO>();
-    public ICollection<InventoryItemDTO> InventoryItems { get; set; } = new List<InventoryItemDTO>();
 }

@@ -5,13 +5,15 @@ namespace Services;
 public class DMCharacterService : IDMCharacterService
 {
     private readonly IDMCharacterRepository _repository;
+    private readonly ICharacterClassRepository _classRepository;
     private readonly IMemoryCache _cache;
     private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30); // Current cache duration is 30 minutes
 
     // Constructor
-    public DMCharacterService(IDMCharacterRepository repository, IMemoryCache cache)
+    public DMCharacterService(IDMCharacterRepository repository, ICharacterClassRepository classRepository, IMemoryCache cache)
     {
         _repository = repository;
+        _classRepository = classRepository;
         _cache = cache;
     }
 
@@ -23,6 +25,13 @@ public class DMCharacterService : IDMCharacterService
         if (!_cache.TryGetValue(cacheKey, out IEnumerable<DMCharacter>? characters) || characters == null)
         {
             characters = await _repository.GetAllAsync();
+
+            // Fetch and include character classes for each DM character
+            foreach (var character in characters)
+            {
+                character.CharacterClasses = (await _classRepository.GetClassesByDMCharacterIdAsync(character.Id)).ToList();
+            }
+
             var cacheEntryOptions = new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = _cacheDuration
@@ -44,6 +53,9 @@ public class DMCharacterService : IDMCharacterService
 
             if (character != null)
             {
+                // Fetch and include character classes for the specific DM character
+                character.CharacterClasses = (await _classRepository.GetClassesByDMCharacterIdAsync(character.Id)).ToList();
+
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = _cacheDuration
@@ -64,6 +76,13 @@ public class DMCharacterService : IDMCharacterService
         }
 
         await _repository.AddAsync(dmCharacter);
+
+        // Optionally add classes to CharacterClassRepository if provided
+        if (dmCharacter.CharacterClasses != null && dmCharacter.CharacterClasses.Any())
+        {
+            await _classRepository.AddClassesAsync(dmCharacter.Id, dmCharacter.CharacterClasses);
+        }
+
         // Invalidate cache for the collection to ensure the new character appears in future queries
         _cache.Remove("AllDMCharacters");
     }
@@ -81,6 +100,12 @@ public class DMCharacterService : IDMCharacterService
         }
 
         await _repository.UpdateAsync(dmCharacter);
+
+        // Optionally update classes in CharacterClassRepository if provided
+        if (dmCharacter.CharacterClasses != null && dmCharacter.CharacterClasses.Any())
+        {
+            await _classRepository.UpdateClassesAsync(dmCharacter.Id, dmCharacter.CharacterClasses);
+        }
 
         // Invalidate the cache for both specific item and all items
         var cacheKey = $"DMCharacter_{dmCharacter.Id}";
@@ -119,4 +144,5 @@ public class DMCharacterService : IDMCharacterService
 
         return await _repository.ExistsAsync(id);
     }
+
 }

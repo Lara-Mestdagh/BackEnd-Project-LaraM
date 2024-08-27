@@ -1,0 +1,55 @@
+@page "/overview"
+
+<h3>Overview</h3>
+
+<p>This page provides an overview of characters and shared inventory.</p>
+
+<div>
+    <h4>Characters</h4>
+    @* A placeholder for character summaries *@
+    <ul>
+        @foreach (var character in characters)
+        {
+            <li>@character.Name (HP: @character.CurrentHP/@character.MaxHP)</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h4>Shared Inventory</h4>
+    @* A placeholder for shared inventory items *@
+    <ul>
+        @foreach (var item in sharedInventory)
+        {
+            <li>@item.Name - Quantity: @item.Quantity</li>
+        }
+    </ul>
+</div>
+
+@code {
+    // Mock data
+    private List<Character> characters = new List<Character>
+    {
+        new Character { Name = "Aragorn", CurrentHP = 50, MaxHP = 100 },
+        new Character { Name = "Legolas", CurrentHP = 70, MaxHP = 80 },
+    };
+
+    private List<Item> sharedInventory = new List<Item>
+    {
+        new Item { Name = "Healing Potion", Quantity = 5 },
+        new Item { Name = "Gold Coins", Quantity = 100 },
+    };
+
+    public class Character
+    {
+        public string Name { get; set; } = string.Empty;  // Initialize with a default value
+        public int CurrentHP { get; set; }
+        public int MaxHP { get; set; }
+    }
+
+    public class Item
+    {
+        public string Name { get; set; } = string.Empty;  // Initialize with a default value
+        public int Quantity { get; set; }
+    }
+}

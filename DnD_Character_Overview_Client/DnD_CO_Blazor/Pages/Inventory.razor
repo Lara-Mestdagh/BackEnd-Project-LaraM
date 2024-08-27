@@ -1,0 +1,77 @@
+@page "/inventory"
+
+<h3>Inventory Management</h3>
+
+<div>
+    <h4>Shared Inventory</h4>
+    @* Display shared inventory items *@
+    <ul>
+        @foreach (var item in sharedInventory)
+        {
+            <li>@item.Name - Quantity: @item.Quantity 
+                <button class="btn btn-sm btn-secondary" @onclick="() => EditItem(item)">Edit</button>
+                <button class="btn btn-sm btn-danger" @onclick="() => DeleteItem(item)">Delete</button>
+            </li>
+        }
+    </ul>
+    <button class="btn btn-primary" @onclick="AddItem">Add Item to Shared Inventory</button>
+</div>
+
+<div>
+    <h4>Character Inventories</h4>
+    @* Display inventories for each character *@
+    @foreach (var character in characters)
+    {
+        <h5>@character.Name's Inventory</h5>
+        <ul>
+            @foreach (var item in character.Inventory)
+            {
+                <li>@item.Name - Quantity: @item.Quantity</li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    // Mock data for shared inventory
+    private List<Item> sharedInventory = new List<Item>
+    {
+        new Item { Name = "Torch", Quantity = 3 },
+        new Item { Name = "Rope", Quantity = 1 }
+    };
+
+    // Mock data for characters and their inventories
+    private List<Character> characters = new List<Character>
+    {
+        new Character { Name = "Aragorn", Inventory = new List<Item> { new Item { Name = "Sword", Quantity = 1 } } },
+        new Character { Name = "Legolas", Inventory = new List<Item> { new Item { Name = "Bow", Quantity = 1 }, new Item { Name = "Arrows", Quantity = 20 } } }
+    };
+
+    public class Item
+    {
+        public string Name { get; set; } = string.Empty;  // Initialize with a default value
+        public int Quantity { get; set; }
+    }
+
+    public class Character
+    {
+        public string Name { get; set; } = string.Empty;  // Initialize with a default value
+        public List<Item> Inventory { get; set; } = new List<Item>();  // Initialize with an empty list
+    }
+
+    private void AddItem()
+    {
+        // Logic for adding a new item to shared inventory
+    }
+
+    private void EditItem(Item item)
+    {
+        // Logic for editing an item in shared inventory
+    }
+
+    private void DeleteItem(Item item)
+    {
+        // Logic for deleting an item from shared inventory
+        sharedInventory.Remove(item);
+    }
+}
