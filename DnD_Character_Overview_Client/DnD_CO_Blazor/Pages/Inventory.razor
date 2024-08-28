@@ -1,77 +1,137 @@
 @page "/inventory"
+@inject Services.InventoryService InventoryService
 
 <h3>Inventory Management</h3>
 
 <div>
     <h4>Shared Inventory</h4>
-    @* Display shared inventory items *@
     <ul>
-        @foreach (var item in sharedInventory)
+        @if (sharedInventory != null && sharedInventory.Any())
         {
-            <li>@item.Name - Quantity: @item.Quantity 
-                <button class="btn btn-sm btn-secondary" @onclick="() => EditItem(item)">Edit</button>
-                <button class="btn btn-sm btn-danger" @onclick="() => DeleteItem(item)">Delete</button>
-            </li>
+            @foreach (var item in sharedInventory)
+            {
+                <li>@item.ItemName - Quantity: @item.Quantity 
+                    <button class="btn btn-sm btn-secondary" @onclick="() => EditItem(item)">Edit</button>
+                    <button class="btn btn-sm btn-danger" @onclick="() => DeleteItem(item.Id)">Delete</button>
+                    <br><br>
+                </li>
+            }
+        }
+        else
+        {
+            <li><em>No items in shared inventory.</em></li>
         }
     </ul>
-    <button class="btn btn-primary" @onclick="AddItem">Add Item to Shared Inventory</button>
+    
+    @* <div>
+        <h4>Add New Item to Shared Inventory</h4>
+        <input type="text" @bind="newItemName" placeholder="Item Name" />
+        <input type="number" @bind="newItemQuantity" placeholder="Quantity" />
+        <button class="btn btn-primary" @onclick="AddItem">Add Item</button>
+    </div> *@
 </div>
 
 <div>
-    <h4>Character Inventories</h4>
-    @* Display inventories for each character *@
-    @foreach (var character in characters)
+    <h4>Player Character Inventories</h4>
+    @if (playerCharacters != null && playerCharacters.Any())
     {
-        <h5>@character.Name's Inventory</h5>
-        <ul>
-            @foreach (var item in character.Inventory)
-            {
-                <li>@item.Name - Quantity: @item.Quantity</li>
-            }
-        </ul>
+        @foreach (var character in playerCharacters)
+        {
+            <h5>@character.Name's Inventory</h5>
+            <ul>
+                @if (character.InventoryItems != null && character.InventoryItems.Any())
+                {
+                    @foreach (var item in character.InventoryItems)
+                    {
+                        <li>@item.ItemName - Quantity: @item.Quantity</li>
+                    }
+                }
+                else
+                {
+                    <li><em>No items.</em></li>
+                }
+            </ul>
+        }
+    }
+    else
+    {
+        <p><em>No player characters available.</em></p>
+    }
+</div>
+
+<div>
+    <h4>DM Character Inventories</h4>
+    @if (dmCharacters != null && dmCharacters.Any())
+    {
+        @foreach (var character in dmCharacters)
+        {
+            <h5>@character.Name's Inventory</h5>
+            <ul>
+                @if (character.InventoryItems != null && character.InventoryItems.Any())
+                {
+                    @foreach (var item in character.InventoryItems)
+                    {
+                        <li>@item.ItemName - Quantity: @item.Quantity</li>
+                    }
+                }
+                else
+                {
+                    <li><em>No items.</em></li>
+                }
+            </ul>
+        }
+    }
+    else
+    {
+        <p><em>No DM characters available.</em></p>
     }
 </div>
 
 @code {
-    // Mock data for shared inventory
-    private List<Item> sharedInventory = new List<Item>
-    {
-        new Item { Name = "Torch", Quantity = 3 },
-        new Item { Name = "Rope", Quantity = 1 }
-    };
+    private List<InventoryItem> sharedInventory = new List<InventoryItem>();
+    private List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
+    private List<DMCharacter> dmCharacters = new List<DMCharacter>();
 
-    // Mock data for characters and their inventories
-    private List<Character> characters = new List<Character>
-    {
-        new Character { Name = "Aragorn", Inventory = new List<Item> { new Item { Name = "Sword", Quantity = 1 } } },
-        new Character { Name = "Legolas", Inventory = new List<Item> { new Item { Name = "Bow", Quantity = 1 }, new Item { Name = "Arrows", Quantity = 20 } } }
-    };
+    // Fields for new item input
+    private string newItemName = string.Empty;
+    private int newItemQuantity = 1;
 
-    public class Item
+    protected override async Task OnInitializedAsync()
     {
-        public string Name { get; set; } = string.Empty;  // Initialize with a default value
-        public int Quantity { get; set; }
+        await LoadInventories();
     }
 
-    public class Character
+    private async Task LoadInventories()
     {
-        public string Name { get; set; } = string.Empty;  // Initialize with a default value
-        public List<Item> Inventory { get; set; } = new List<Item>();  // Initialize with an empty list
+        playerCharacters = await InventoryService.GetPlayerCharactersAsync() ?? new List<PlayerCharacter>();
+        Console.WriteLine($"Loaded {playerCharacters.Count} player characters.");
+
+        dmCharacters = await InventoryService.GetDMCharactersAsync() ?? new List<DMCharacter>();
+        Console.WriteLine($"Loaded {dmCharacters.Count} DM characters.");
+
+        await InventoryService.PopulateCharacterInventories(playerCharacters, dmCharacters);
+
+        sharedInventory = await InventoryService.GetPartyInventoryAsync() ?? new List<InventoryItem>();
+        Console.WriteLine($"Loaded {sharedInventory.Count} shared inventory items.");
     }
 
-    private void AddItem()
+    private async Task AddItem()
     {
-        // Logic for adding a new item to shared inventory
+        var newItem = new InventoryItem { ItemName = "New Item", Quantity = 1, Weight = 0.5m }; // Example new item
+        int characterId = 1; // Assign appropriate ID
+        await InventoryService.AddInventoryItemAsync(characterId, newItem); // Replace 'characterId' with appropriate ID
+        await LoadInventories();
     }
 
-    private void EditItem(Item item)
+    private void EditItem(InventoryItem item)
     {
-        // Logic for editing an item in shared inventory
+        // Logic for editing an item
     }
 
-    private void DeleteItem(Item item)
+    private async Task DeleteItem(int itemId)
     {
-        // Logic for deleting an item from shared inventory
-        sharedInventory.Remove(item);
+        int characterId = 1; // Assign appropriate ID
+        await InventoryService.DeleteInventoryItemAsync(characterId, itemId); // Replace 'characterId' with appropriate ID
+        await LoadInventories();
     }
 }

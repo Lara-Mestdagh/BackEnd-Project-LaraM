@@ -19,18 +19,28 @@ public class InventoryController : ControllerBase
 
     // Get all inventory items for a specific character
     [HttpGet("characters/{id}/inventory")]
-    public async Task<IActionResult> GetInventoryItemsForCharacter(int id)
+    public async Task<IActionResult> GetInventoryItemsForCharacter(int id, [FromHeader(Name = "type")] string type)
     {
-        var items = await _inventoryService.GetInventoryItemsForCharacterAsync(id);
+        if (string.IsNullOrEmpty(type) || (type != "player" && type != "dm"))
+        {
+            return BadRequest("Invalid or missing 'type' parameter in the header. Must be 'player' or 'dm'.");
+        }
+
+        var items = await _inventoryService.GetInventoryItemsForCharacterAsync(id, type);
         var itemDtos = _mapper.Map<IEnumerable<InventoryItemDTO>>(items);
         return Ok(itemDtos);
     }
 
     // Get a specific inventory item by character ID and item ID
     [HttpGet("characters/{characterId}/inventory/{itemId}")]
-    public async Task<IActionResult> GetInventoryItemById(int characterId, int itemId)
+    public async Task<IActionResult> GetInventoryItemById(int characterId, int itemId, [FromHeader(Name = "type")] string type)
     {
-        var item = await _inventoryService.GetInventoryItemByIdAsync(characterId, itemId);
+        if (type != "player" && type != "dm")
+        {
+            return BadRequest("Invalid type parameter. Must be 'player' or 'dm'.");
+        }
+
+        var item = await _inventoryService.GetInventoryItemByIdAsync(characterId, itemId, type);
         if (item == null)
         {
             return NotFound("Inventory item not found.");
@@ -42,31 +52,50 @@ public class InventoryController : ControllerBase
 
     // Add a new inventory item to a character
     [HttpPost("characters/{id}/inventory")]
-    public async Task<IActionResult> AddInventoryItem(int id, [FromBody] InventoryItemDTO itemDto)
+    public async Task<IActionResult> AddInventoryItem(int id, [FromHeader(Name = "type")] string type, [FromBody] InventoryItemDTO itemDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
+        if (type != "player" && type != "dm")
+        {
+            return BadRequest("Invalid type parameter. Must be 'player' or 'dm'.");
+        }
+
         var item = _mapper.Map<InventoryItem>(itemDto);
-        item.PlayerCharacterId = id; // or item.DMCharacterId = id; depending on the character type
+
+        // Assign the character type and ID based on the type parameter
+        if (type == "player")
+        {
+            item.PlayerCharacterId = id;
+        }
+        else if (type == "dm")
+        {
+            item.DMCharacterId = id;
+        }
 
         await _inventoryService.AddInventoryItemAsync(item);
         var addedItemDto = _mapper.Map<InventoryItemDTO>(item);
-        return CreatedAtAction(nameof(GetInventoryItemById), new { characterId = id, itemId = item.Id }, addedItemDto);
+        return CreatedAtAction(nameof(GetInventoryItemById), new { characterId = id, itemId = item.Id, type = type }, addedItemDto);
     }
 
     // Update an existing inventory item
     [HttpPut("characters/{characterId}/inventory/{itemId}")]
-    public async Task<IActionResult> UpdateInventoryItem(int characterId, int itemId, [FromBody] InventoryItemDTO itemDto)
+    public async Task<IActionResult> UpdateInventoryItem(int characterId, int itemId, [FromHeader(Name = "type")] string type, [FromBody] InventoryItemDTO itemDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var existingItem = await _inventoryService.GetInventoryItemByIdAsync(characterId, itemId);
+        if (type != "player" && type != "dm")
+        {
+            return BadRequest("Invalid type parameter. Must be 'player' or 'dm'.");
+        }
+
+        var existingItem = await _inventoryService.GetInventoryItemByIdAsync(characterId, itemId, type);
         if (existingItem == null)
         {
             return NotFound("Inventory item not found.");
@@ -79,10 +108,15 @@ public class InventoryController : ControllerBase
 
     // Delete an inventory item from a character
     [HttpDelete("characters/{characterId}/inventory/{itemId}")]
-    public async Task<IActionResult> DeleteInventoryItem(int characterId, int itemId)
+    public async Task<IActionResult> DeleteInventoryItem(int characterId, int itemId, [FromHeader(Name = "type")] string type)
     {
+        if (type != "player" && type != "dm")
+        {
+            return BadRequest("Invalid type parameter. Must be 'player' or 'dm'.");
+        }
+
         // Call the service method and check if the item exists and was deleted
-        bool success = await _inventoryService.DeleteInventoryItemAsync(characterId, itemId);
+        bool success = await _inventoryService.DeleteInventoryItemAsync(characterId, itemId, type);
         
         if (!success)
         {

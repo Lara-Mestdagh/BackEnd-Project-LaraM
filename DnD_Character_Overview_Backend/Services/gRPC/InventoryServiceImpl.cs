@@ -14,19 +14,19 @@ public class InventoryServiceImpl : Protos.InventoryService.InventoryServiceBase
 
     public override async Task<InventoryItemsResponse> GetInventoryItems(GetInventoryItemsRequest request, ServerCallContext context)
     {
-        var items = await _inventoryService.GetInventoryItemsForCharacterAsync(request.CharacterId);
+        var items = await _inventoryService.GetInventoryItemsForCharacterAsync(request.CharacterId, request.Type);
         var response = new InventoryItemsResponse();
 
         response.Items.AddRange(items.Select(item => new Protos.InventoryItem
         {
             Id = item.Id,
-            PlayerCharacterId = item.PlayerCharacterId ?? 0, // Use null-coalescing operator to handle nulls
-            DmCharacterId = item.DMCharacterId ?? 0, // Use null-coalescing operator to handle nulls
-            SharedInventoryId = item.SharedInventoryId ?? 0, // Use null-coalescing operator to handle nulls
-            Name = item.ItemName ?? string.Empty, // Handle null strings
+            PlayerCharacterId = item.PlayerCharacterId ?? 0,
+            DmCharacterId = item.DMCharacterId ?? 0,
+            SharedInventoryId = item.SharedInventoryId ?? 0,
+            Name = item.ItemName ?? string.Empty,
             Quantity = item.Quantity,
             Weight = (float)item.Weight,
-            WeightUnit = item.WeightUnit ?? "lb" // Handle null strings
+            WeightUnit = item.WeightUnit ?? "lb"
         }));
 
         return response;
@@ -34,7 +34,7 @@ public class InventoryServiceImpl : Protos.InventoryService.InventoryServiceBase
 
     public override async Task<InventoryItemResponse> GetInventoryItemById(GetInventoryItemByIdRequest request, ServerCallContext context)
     {
-        var item = await _inventoryService.GetInventoryItemByIdAsync(request.CharacterId, request.ItemId);
+        var item = await _inventoryService.GetInventoryItemByIdAsync(request.CharacterId, request.ItemId, request.Type);
         if (item == null)
         {
             throw new RpcException(new Status(StatusCode.NotFound, "Inventory item not found."));
@@ -96,11 +96,8 @@ public class InventoryServiceImpl : Protos.InventoryService.InventoryServiceBase
 
     public override async Task<DeleteInventoryItemResponse> DeleteInventoryItem(DeleteInventoryItemRequest request, ServerCallContext context)
     {
-        // Call the service method and get the result
-        bool success = await _inventoryService.DeleteInventoryItemAsync(request.CharacterId, request.ItemId);
+        bool success = await _inventoryService.DeleteInventoryItemAsync(request.CharacterId, request.ItemId, request.Type);
         
-        // Return a response indicating whether the deletion was successful
         return new DeleteInventoryItemResponse { Success = success };
     }
-
 }

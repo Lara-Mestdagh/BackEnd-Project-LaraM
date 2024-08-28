@@ -1,53 +1,134 @@
 @page "/all-characters"
+@inject NavigationManager NavigationManager
+@inject PlayerCharacterService PlayerCharacterService
+@inject DMCharacterService DMCharacterService
 
-<h3>All Characters</h3>
+<h2>All Characters</h2>
+<hr>
 
 <p>Manage all characters here, including Player and DM characters.</p>
 
-<button class="btn btn-primary" @onclick="AddCharacter">Add New Character</button>
+<button class="btn btn-primary mb-3" @onclick="ShowCharacterTypeSelectionModal">Add New Character</button>
 
 <div>
-    <h4>Characters List</h4>
-    @* A placeholder for characters management *@
-    <ul>
-        @foreach (var character in characters)
+    <h4>Player Characters</h4>
+    <ul class="list-group">
+        @foreach (var character in playerCharacters)
         {
-            <li>
-                @character.Name 
-                (<span class="text-muted">@character.Type</span>)
-                <button class="btn btn-sm btn-secondary" @onclick="() => EditCharacter(character)">Edit</button>
-                <button class="btn btn-sm btn-danger" @onclick="() => DeleteCharacter(character)">Delete</button>
-            </li>
+            <!-- Only display characters with CurrentHP greater than 0 -->
+            @if (character.CurrentHP > 0)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>@character.Name</span>
+                    <span>
+                        <button class="btn btn-sm btn-info" @onclick="() => NavigateToPlayerDetails(character.Id)">Details</button>
+                        <button class="btn btn-sm btn-secondary" @onclick="@(() => EditCharacter(character, "player"))">Edit</button>
+                        @* <button class="btn btn-sm btn-danger" @onclick="@(() => DeletePlayerCharacter(character.Id))">Delete</button> *@
+                    </span>
+                </li>
+            }
+        }
+    </ul>
+</div>
+<br>
+
+<div>
+    <h4>DM Characters</h4>
+    <ul class="list-group">
+        @foreach (var character in dmCharacters)
+        {
+            <!-- Only display characters with CurrentHP greater than 0 -->
+            @if (character.CurrentHP > 0)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>@character.Name</span>
+                    <span>
+                        <button class="btn btn-sm btn-info" @onclick="() => NavigateToDMDetails(character.Id)">Details</button>
+                        <button class="btn btn-sm btn-secondary" @onclick="@(() => EditCharacter(character, "dm"))">Edit</button>
+                        @* <button class="btn btn-sm btn-danger" @onclick="@(() => DeleteDMCharacter(character.Id))">Delete</button> *@
+                    </span>
+                </li>
+            }
         }
     </ul>
 </div>
 
+<!-- Character Type Selection Modal -->
+@if (isCharacterTypeSelectionModalVisible)
+{
+    <div class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Character Type</h5>
+                    <button type="button" class="close" @onclick="HideCharacterTypeSelectionModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-primary" @onclick="@(() => ShowAddCharacterPage("player"))">Player Character</button>
+                    <button class="btn btn-secondary" @onclick="@(() => ShowAddCharacterPage("dm"))">DM Character</button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="HideCharacterTypeSelectionModal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
-    private List<Character> characters = new List<Character>
-    {
-        new Character { Name = "Gandalf", Type = "DM Character" },
-        new Character { Name = "Frodo", Type = "Player Character" },
-    };
+    private List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
+    private List<DMCharacter> dmCharacters = new List<DMCharacter>();
+    private bool isCharacterTypeSelectionModalVisible = false;
 
-    public class Character
+    protected override async Task OnInitializedAsync()
     {
-        public string Name { get; set; } = string.Empty;  // Initialize with a default value
-        public string Type { get; set; } = string.Empty;  // Initialize with a default value
+        playerCharacters = (await PlayerCharacterService.GetPlayerCharactersAsync() ?? new List<PlayerCharacter>())
+                            .Where(pc => pc.CurrentHP > 0).ToList();
+        dmCharacters = (await DMCharacterService.GetDMCharactersAsync() ?? new List<DMCharacter>())
+                        .Where(dc => dc.CurrentHP > 0).ToList();
     }
 
-    private void AddCharacter()
+    private void ShowCharacterTypeSelectionModal()
     {
-        // Logic for adding a new character (e.g., show a form or modal)
+        isCharacterTypeSelectionModalVisible = true;
     }
 
-    private void EditCharacter(Character character)
+    private void HideCharacterTypeSelectionModal()
     {
-        // Logic for editing a character (e.g., show a form or modal pre-filled with character data)
+        isCharacterTypeSelectionModalVisible = false;
     }
 
-    private void DeleteCharacter(Character character)
+    private void ShowAddCharacterPage(string characterType)
     {
-        // Logic for deleting a character
-        characters.Remove(character);
+        NavigationManager.NavigateTo($"/add-character/{characterType}");
+    }
+
+    private void EditCharacter(CharacterBase character, string characterType)
+    {
+        NavigationManager.NavigateTo($"/edit-character/{character.Id}/{characterType}");
+    }
+
+    private async Task DeletePlayerCharacter(int id)
+    {
+        await PlayerCharacterService.DeletePlayerCharacterAsync(id);
+        playerCharacters = (await PlayerCharacterService.GetPlayerCharactersAsync() ?? new List<PlayerCharacter>())
+                            .Where(pc => pc.CurrentHP > 0).ToList();
+    }
+
+    private async Task DeleteDMCharacter(int id)
+    {
+        await DMCharacterService.DeleteDMCharacterAsync(id);
+        dmCharacters = (await DMCharacterService.GetDMCharactersAsync() ?? new List<DMCharacter>())
+                        .Where(dc => dc.CurrentHP > 0).ToList();
+    }
+
+    private void NavigateToPlayerDetails(int id)
+    {
+        NavigationManager.NavigateTo($"/player-character-details/{id}");
+    }
+
+    private void NavigateToDMDetails(int id)
+    {
+        NavigationManager.NavigateTo($"/dm-character-details/{id}");
     }
 }

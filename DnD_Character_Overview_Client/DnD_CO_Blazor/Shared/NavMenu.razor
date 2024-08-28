@@ -1,39 +1,36 @@
-﻿@using Microsoft.AspNetCore.Components
-
-<div class="top-row ps-3 navbar navbar-expand-lg navbar-dark bg-dark">
+﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">DnD_CO_Blazor</a>
-        <button class="navbar-toggler" type="button" @onclick="ToggleNavMenu" aria-controls="navbarNav" aria-expanded="@(!collapseNavMenu).ToString().ToLower()" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="">DnD Overview</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="@NavMenuCssClass" id="navbarNav">
-            <!-- Change 'navbar-nav' to 'nav flex-column' for vertical alignment -->
-            <nav class="nav flex-column me-auto mb-2 mb-lg-0">
-                <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
-                    <span class="oi oi-home" aria-hidden="true"></span> Home
-                </NavLink>
-                <NavLink class="nav-link" href="/overview">
-                    <span class="oi oi-dashboard" aria-hidden="true"></span> Overview
-                </NavLink>
-                <NavLink class="nav-link" href="/all-characters">
-                    <span class="oi oi-people" aria-hidden="true"></span> All Characters
-                </NavLink>
-                <NavLink class="nav-link" href="/inventory">
-                    <span class="oi oi-briefcase" aria-hidden="true"></span> Inventory
-                </NavLink>
-            </nav>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
     </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="overview">
+                <span class="oi oi-home" aria-hidden="true"></span> Overview
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="all-characters">
+                <span class="oi oi-people" aria-hidden="true"></span> Characters
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="inventory">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Inventory
+            </NavLink>
+        </div>
+    </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse navbar-collapse" : "navbar-collapse show";
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {

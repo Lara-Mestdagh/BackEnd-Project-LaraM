@@ -32,7 +32,7 @@ public class PlayerCharacterService : IPlayerCharacterService
             // Fetch and include character classes for each character
             foreach (var character in characters)
             {
-                character.CharacterClasses = (await _classRepository.GetClassesByCharacterIdAsync(character.Id)).ToList();
+                character.CharacterClasses = (await _classRepository.GetClassesByPlayerCharacterIdAsync(character.Id)).ToList();
             }
 
             var cacheEntryOptions = new MemoryCacheEntryOptions
@@ -57,7 +57,7 @@ public class PlayerCharacterService : IPlayerCharacterService
             if (character != null)
             {
                 // Fetch and include character classes for the specific character
-                character.CharacterClasses = (await _classRepository.GetClassesByCharacterIdAsync(character.Id)).ToList();
+                character.CharacterClasses = (await _classRepository.GetClassesByPlayerCharacterIdAsync(character.Id)).ToList();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
@@ -83,7 +83,7 @@ public class PlayerCharacterService : IPlayerCharacterService
         // Optionally add classes to CharacterClassRepository if provided
         if (playerCharacter.CharacterClasses != null && playerCharacter.CharacterClasses.Any())
         {
-            await _classRepository.AddClassesAsync(playerCharacter.Id, playerCharacter.CharacterClasses);
+            await _classRepository.AddClassesToPlayerCharacterAsync(playerCharacter.Id, playerCharacter.CharacterClasses);
         }
 
         // Invalidate cache for "AllPlayerCharacters" to ensure it is refreshed
@@ -107,7 +107,7 @@ public class PlayerCharacterService : IPlayerCharacterService
         // Optionally update classes in CharacterClassRepository if provided
         if (playerCharacter.CharacterClasses != null && playerCharacter.CharacterClasses.Any())
         {
-            await _classRepository.UpdateClassesAsync(playerCharacter.Id, playerCharacter.CharacterClasses);
+            await _classRepository.UpdateClassesAsync(playerCharacter.CharacterClasses);
         }
 
         // Invalidate the cache for both specific item and all items

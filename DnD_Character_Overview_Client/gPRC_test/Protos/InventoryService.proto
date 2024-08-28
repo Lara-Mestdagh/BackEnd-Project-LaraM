@@ -3,7 +3,6 @@ syntax = "proto3";
 option csharp_namespace = "Protos";
 
 // Service definition for inventory.
-// Service definition for inventory.
 service InventoryService {
     rpc GetInventoryItems (GetInventoryItemsRequest) returns (InventoryItemsResponse);
     rpc GetInventoryItemById (GetInventoryItemByIdRequest) returns (InventoryItemResponse);
@@ -12,7 +11,7 @@ service InventoryService {
     rpc DeleteInventoryItem (DeleteInventoryItemRequest) returns (DeleteInventoryItemResponse);
 }
 
-// Existing message definition
+// Definition for an inventory item.
 message InventoryItem {
     int32 id = 1;
     int32 player_character_id = 2;
@@ -24,45 +23,57 @@ message InventoryItem {
     string weight_unit = 8;
 }
 
-// Add missing message definitions
+// Request to get inventory items with character ID and type.
 message GetInventoryItemsRequest {
     int32 character_id = 1;
+    string type = 2; // New field to specify "player" or "dm"
 }
 
+// Response containing a list of inventory items.
 message InventoryItemsResponse {
     repeated InventoryItem items = 1;
 }
 
+// Request to get a specific inventory item by character ID, item ID, and type.
 message GetInventoryItemByIdRequest {
     int32 character_id = 1;
     int32 item_id = 2;
+    string type = 3; // New field to specify "player" or "dm"
 }
 
+// Response containing a single inventory item.
 message InventoryItemResponse {
     InventoryItem item = 1;
 }
 
+// Request to add a new inventory item.
 message AddInventoryItemRequest {
     InventoryItem item = 1;
 }
 
+// Response confirming the addition of an inventory item.
 message AddInventoryItemResponse {
     bool success = 1;
 }
 
+// Request to update an existing inventory item.
 message UpdateInventoryItemRequest {
     InventoryItem item = 1;
 }
 
+// Response confirming the update of an inventory item.
 message UpdateInventoryItemResponse {
     bool success = 1;
 }
 
+// Request to delete an inventory item by character ID, item ID, and type.
 message DeleteInventoryItemRequest {
     int32 character_id = 1;
     int32 item_id = 2;
+    string type = 3; // New field to specify "player" or "dm"
 }
 
+// Response confirming the deletion of an inventory item.
 message DeleteInventoryItemResponse {
     bool success = 1;
 }

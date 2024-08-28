@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using DnD_CO_Blazor.Data;
+using System.Net.Http.Headers;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -13,7 +14,25 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddRazorComponents();
+
+// API services
+builder.Services.AddScoped<PlayerCharacterService>();
+builder.Services.AddScoped<DMCharacterService>();
+builder.Services.AddScoped<InventoryService>();
+builder.Services.AddScoped<FileService>();
+
+
+// Add services to the container.
+builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
+
+// Register HttpClient with API key
+builder.Services.AddHttpClient("AuthorizedClient", (serviceProvider, client) =>
+{
+    var apiSettings = serviceProvider.GetRequiredService<IOptions<ApiSettings>>().Value;
+    client.BaseAddress = new Uri(apiSettings.BaseUrl);
+    client.DefaultRequestHeaders.Add("X-API-KEY", apiSettings.ApiKey);
+});
 
 builder.WebHost.UseKestrel(options =>
 {
@@ -34,9 +53,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.MapBlazorHub();

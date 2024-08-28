@@ -1,0 +1,239 @@
+@page "/edit-character/{characterId:int}/{characterType}"
+@inject PlayerCharacterService PlayerCharacterService
+@inject DMCharacterService DMCharacterService
+@inject NavigationManager NavigationManager
+
+<h3>Edit @characterType Character</h3>
+
+@if (characterToEdit != null)
+{
+    <EditForm Model="@characterToEdit" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <!-- Basic Information -->
+        <h4>Basic Information</h4>
+        <div class="form-group">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="characterToEdit.Name" />
+        </div>
+        <div class="form-group">
+            <label>Race</label>
+            <InputText class="form-control" @bind-Value="characterToEdit.Race" />
+        </div>
+        <div class="form-group">
+            <label>Image Path</label>
+            <InputText class="form-control" @bind-Value="characterToEdit.ImagePath" />
+        </div>
+        @if (isPlayerCharacter)
+        {
+            <!-- Player-specific fields -->
+            <div class="form-group">
+                <label>Player Name</label>
+                <InputText class="form-control" @bind-Value="((PlayerCharacter)characterToEdit).PlayerName" />
+            </div>
+        }
+
+        <!-- Stats -->
+        <h4>Stats</h4>
+        <!-- Your existing stat input fields here -->
+
+        <!-- Health and Armor -->
+        <h4>Health and Armor</h4>
+        <!-- Your existing health and armor input fields here -->
+
+        <!-- Speeds -->
+        <h4>Speeds</h4>
+        <!-- Your existing speed input fields here -->
+
+        <!-- Languages, Resistances, Weaknesses -->
+        <h4>Languages and Attributes</h4>
+        <!-- Your existing languages, resistances, and weaknesses input fields here -->
+
+        <!-- Character Classes -->
+        <h4>Character Classes</h4>
+        <div class="form-group">
+            <label>Class Name</label>
+            <InputText class="form-control" @bind-Value="newCharacterClass.ClassName" />
+        </div>
+        <div class="form-group">
+            <label>Level</label>
+            <InputNumber class="form-control" @bind-Value="newCharacterClass.Level" />
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" @onclick="AddCharacterClass">Add Class</button>
+
+        <ul>
+            @foreach (var characterClass in characterClasses)
+            {
+                <li>
+                    <div class="d-flex align-items-center">
+                        <InputText class="form-control" @bind-Value="characterClass.ClassName" readonly />
+                        <InputNumber class="form-control ml-2" @bind-Value="characterClass.Level" />
+                        <button class="btn btn-danger btn-sm ml-2" @onclick="() => RemoveCharacterClass(characterClass)">Delete</button>
+                    </div>
+                </li>
+            }
+        </ul>
+
+        @if (!isPlayerCharacter)
+        {
+            <!-- DM-specific fields -->
+            <div class="form-group">
+                <label>Legendary Actions</label>
+                <InputText class="form-control" @bind-Value="((DMCharacter)characterToEdit).LegendaryActions" />
+            </div>
+            <div class="form-group">
+                <label>Special Abilities</label>
+                <InputText class="form-control" @bind-Value="((DMCharacter)characterToEdit).SpecialAbilities" />
+            </div>
+        }
+
+        <!-- Status -->
+        <h4>Status</h4>
+        <!-- Your existing status input fields here -->
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+    </EditForm>
+}
+else
+{
+    <p>Loading character data...</p>
+}
+
+@code {
+    [Parameter]
+    public int characterId { get; set; }
+
+    [Parameter]
+    public string characterType { get; set; }
+
+    private CharacterBase characterToEdit;
+    private bool isPlayerCharacter;
+    private string selectedLanguage;
+    private string selectedResistance;
+    private string selectedWeakness;
+    private List<Enums.Languages> availableLanguages = Enum.GetValues<Enums.Languages>().ToList();
+    private List<Enums.DamageType> availableDamageTypes = Enum.GetValues<Enums.DamageType>().ToList();
+    private CharacterClass newCharacterClass = new CharacterClass();
+    private List<CharacterClass> characterClasses = new List<CharacterClass>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (characterType.ToLower() == "player")
+        {
+            var playerCharacter = await PlayerCharacterService.GetPlayerCharacterByIdAsync(characterId);
+            if (playerCharacter != null)
+            {
+                characterToEdit = playerCharacter;
+                characterClasses = playerCharacter.CharacterClasses?.ToList() ?? new List<CharacterClass>();
+            }
+            isPlayerCharacter = true;
+        }
+        else
+        {
+            var dmCharacter = await DMCharacterService.GetDMCharacterByIdAsync(characterId);
+            if (dmCharacter != null)
+            {
+                characterToEdit = dmCharacter;
+                characterClasses = dmCharacter.CharacterClasses?.ToList() ?? new List<CharacterClass>();
+            }
+            isPlayerCharacter = false;
+        }
+
+        // Initialize selections
+        selectedLanguage = availableLanguages.First().ToString();
+        selectedResistance = availableDamageTypes.First().ToString();
+        selectedWeakness = availableDamageTypes.First().ToString();
+    }
+
+    private void AddLanguage()
+    {
+        var language = Enum.Parse<Enums.Languages>(selectedLanguage);
+        if (!characterToEdit.KnownLanguages.Contains(language))
+        {
+            characterToEdit.KnownLanguages.Add(language);
+        }
+    }
+
+    private void AddResistance()
+    {
+        var resistance = Enum.Parse<Enums.DamageType>(selectedResistance);
+        if (!characterToEdit.Resistances.Contains(resistance))
+        {
+            characterToEdit.Resistances.Add(resistance);
+        }
+    }
+
+    private void AddWeakness()
+    {
+        var weakness = Enum.Parse<Enums.DamageType>(selectedWeakness);
+        if (!characterToEdit.Weaknesses.Contains(weakness))
+        {
+            characterToEdit.Weaknesses.Add(weakness);
+        }
+    }
+
+    private void AddCharacterClass()
+    {
+        if (!string.IsNullOrWhiteSpace(newCharacterClass.ClassName) && newCharacterClass.Level > 0)
+        {
+            characterClasses.Add(new CharacterClass
+            {
+                ClassName = newCharacterClass.ClassName,
+                Level = newCharacterClass.Level
+            });
+
+            // Clear the input fields for next input
+            newCharacterClass = new CharacterClass();
+        }
+    }
+
+    private void RemoveCharacterClass(CharacterClass characterClass)
+    {
+        characterClasses.Remove(characterClass);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        Console.WriteLine("Submitting form...");
+
+        if (isPlayerCharacter)
+        {
+            ((PlayerCharacter)characterToEdit).CharacterClasses = characterClasses;
+            Console.WriteLine($"PlayerCharacter to update: {System.Text.Json.JsonSerializer.Serialize(characterToEdit)}");
+
+            try
+            {
+                await PlayerCharacterService.UpdatePlayerCharacterAsync((PlayerCharacter)characterToEdit);
+                Console.WriteLine("Player character updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating player character: {ex.Message}");
+            }
+        }
+        else
+        {
+            ((DMCharacter)characterToEdit).CharacterClasses = characterClasses;
+            Console.WriteLine($"DMCharacter to update: {System.Text.Json.JsonSerializer.Serialize(characterToEdit)}");
+
+            try
+            {
+                await DMCharacterService.UpdateDMCharacterAsync((DMCharacter)characterToEdit);
+                Console.WriteLine("DM character updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating DM character: {ex.Message}");
+            }
+        }
+
+        NavigationManager.NavigateTo("/all-characters");
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/all-characters");
+    }
+}

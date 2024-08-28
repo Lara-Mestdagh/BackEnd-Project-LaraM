@@ -1,4 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
 
 namespace Services;
 
@@ -80,7 +83,7 @@ public class DMCharacterService : IDMCharacterService
         // Optionally add classes to CharacterClassRepository if provided
         if (dmCharacter.CharacterClasses != null && dmCharacter.CharacterClasses.Any())
         {
-            await _classRepository.AddClassesAsync(dmCharacter.Id, dmCharacter.CharacterClasses);
+            await _classRepository.AddClassesToDMCharacterAsync(dmCharacter.Id, dmCharacter.CharacterClasses);
         }
 
         // Invalidate cache for the collection to ensure the new character appears in future queries
@@ -104,7 +107,7 @@ public class DMCharacterService : IDMCharacterService
         // Optionally update classes in CharacterClassRepository if provided
         if (dmCharacter.CharacterClasses != null && dmCharacter.CharacterClasses.Any())
         {
-            await _classRepository.UpdateClassesAsync(dmCharacter.Id, dmCharacter.CharacterClasses);
+            await _classRepository.UpdateClassesAsync(dmCharacter.CharacterClasses);
         }
 
         // Invalidate the cache for both specific item and all items
@@ -144,5 +147,4 @@ public class DMCharacterService : IDMCharacterService
 
         return await _repository.ExistsAsync(id);
     }
-
 }

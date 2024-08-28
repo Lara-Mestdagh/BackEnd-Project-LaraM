@@ -13,19 +13,44 @@ public class InventoryRepository : IInventoryRepository
         _context = context;
     }
 
-    // Get all inventory items for a specific character
-    public async Task<IEnumerable<InventoryItem>> GetInventoryItemsForCharacterAsync(int characterId)
+    // Get all inventory items for a specific character based on type
+    public async Task<IEnumerable<InventoryItem>> GetInventoryItemsForCharacterAsync(int characterId, string type)
     {
-        return await _context.InventoryItems
-            .Where(item => item.PlayerCharacterId == characterId || item.DMCharacterId == characterId)
-            .ToListAsync();
+        if (type == "player")
+        {
+            return await _context.InventoryItems
+                .Where(item => item.PlayerCharacterId == characterId)
+                .ToListAsync();
+        }
+        else if (type == "dm")
+        {
+            return await _context.InventoryItems
+                .Where(item => item.DMCharacterId == characterId)
+                .ToListAsync();
+        }
+        else
+        {
+            throw new ArgumentException("Invalid type parameter. Must be 'player' or 'dm'.", nameof(type));
+        }
     }
 
-    // Get a specific inventory item by character ID and item ID
-    public async Task<InventoryItem> GetInventoryItemByIdAsync(int characterId, int itemId)
+    // Get a specific inventory item by character ID and item ID based on type
+    public async Task<InventoryItem> GetInventoryItemByIdAsync(int characterId, int itemId, string type)
     {
-        return await _context.InventoryItems
-            .FirstOrDefaultAsync(item => (item.PlayerCharacterId == characterId || item.DMCharacterId == characterId) && item.Id == itemId);
+        if (type == "player")
+        {
+            return await _context.InventoryItems
+                .FirstOrDefaultAsync(item => item.PlayerCharacterId == characterId && item.Id == itemId);
+        }
+        else if (type == "dm")
+        {
+            return await _context.InventoryItems
+                .FirstOrDefaultAsync(item => item.DMCharacterId == characterId && item.Id == itemId);
+        }
+        else
+        {
+            throw new ArgumentException("Invalid type parameter. Must be 'player' or 'dm'.", nameof(type));
+        }
     }
 
     // Get a specific inventory item by item ID only (for moving items)
@@ -131,5 +156,4 @@ public class InventoryRepository : IInventoryRepository
             throw new InvalidOperationException("Cannot remove a non-existing item.");
         }
     }
-    
 }

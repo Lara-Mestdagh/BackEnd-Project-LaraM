@@ -1,0 +1,357 @@
+@page "/add-character/{characterType}"
+@inject PlayerCharacterService PlayerCharacterService
+@inject DMCharacterService DMCharacterService
+@inject NavigationManager NavigationManager
+@inject IHttpClientFactory HttpClientFactory
+
+<h3>Add New @characterType Character</h3>
+
+<EditForm Model="@characterToAdd" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <!-- Basic Information -->
+    <h4>Basic Information</h4>
+    <div class="form-group">
+        <label>Name</label>
+        <InputText class="form-control" @bind-Value="characterToAdd.Name" />
+    </div>
+    <div class="form-group">
+        <label>Race</label>
+        <InputText class="form-control" @bind-Value="characterToAdd.Race" />
+    </div>
+    <!-- File Upload -->
+    <div class="form-group">
+        <label>Upload Image</label>
+        <InputFile OnChange="HandleFileSelected" />
+    </div>
+    @if (isPlayerCharacter)
+    {
+        <!-- Player-specific fields -->
+        <div class="form-group">
+            <label>Player Name</label>
+            <InputText class="form-control" @bind-Value="((PlayerCharacter)characterToAdd).PlayerName" />
+        </div>
+    }
+
+    <!-- Stats -->
+    <h4>Stats</h4>
+    <div class="form-group">
+        <label>Strength</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.Strength" />
+    </div>
+    <div class="form-group">
+        <label>Dexterity</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.Dexterity" />
+    </div>
+    <div class="form-group">
+        <label>Constitution</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.Constitution" />
+    </div>
+    <div class="form-group">
+        <label>Intelligence</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.Intelligence" />
+    </div>
+    <div class="form-group">
+        <label>Wisdom</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.Wisdom" />
+    </div>
+    <div class="form-group">
+        <label>Charisma</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.Charisma" />
+    </div>
+
+    <!-- Health and Armor -->
+    <h4>Health and Armor</h4>
+    <div class="form-group">
+        <label>Current HP</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.CurrentHP" />
+    </div>
+    <div class="form-group">
+        <label>Max HP</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.MaxHP" />
+    </div>
+    <div class="form-group">
+        <label>Temp HP</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.TempHP" />
+    </div>
+    <div class="form-group">
+        <label>Armor Class</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.ArmorClass" />
+    </div>
+
+    <!-- Speeds -->
+    <h4>Speeds</h4>
+    <div class="form-group">
+        <label>Walking Speed</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.WalkingSpeed" />
+    </div>
+    <div class="form-group">
+        <label>Flying Speed</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.FlyingSpeed" />
+    </div>
+    <div class="form-group">
+        <label>Swimming Speed</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.SwimmingSpeed" />
+    </div>
+    <div class="form-group">
+        <label>Darkvision Range</label>
+        <InputNumber class="form-control" @bind-Value="characterToAdd.DarkvisionRange" />
+    </div>
+
+    <!-- Languages, Resistances, Weaknesses -->
+    <h4>Languages and Attributes</h4>
+    <div class="form-group">
+        <label>Known Languages</label>
+        <InputSelect @bind-Value="selectedLanguage">
+            @foreach (var language in availableLanguages)
+            {
+                <option value="@language">@language</option>
+            }
+        </InputSelect>
+        <button type="button" class="btn btn-secondary btn-sm" @onclick="AddLanguage">Add</button>
+        <ul>
+            @foreach (var lang in characterToAdd.KnownLanguages)
+            {
+                <li>@lang</li>
+            }
+        </ul>
+    </div>
+    <div class="form-group">
+        <label>Resistances</label>
+        <InputSelect @bind-Value="selectedResistance">
+            @foreach (var resistance in availableDamageTypes)
+            {
+                <option value="@resistance">@resistance</option>
+            }
+        </InputSelect>
+        <button type="button" class="btn btn-secondary btn-sm" @onclick="AddResistance">Add</button>
+        <ul>
+            @foreach (var res in characterToAdd.Resistances)
+            {
+                <li>@res</li>
+            }
+        </ul>
+    </div>
+    <div class="form-group">
+        <label>Weaknesses</label>
+        <InputSelect @bind-Value="selectedWeakness">
+            @foreach (var weakness in availableDamageTypes)
+            {
+                <option value="@weakness">@weakness</option>
+            }
+        </InputSelect>
+        <button type="button" class="btn btn-secondary btn-sm" @onclick="AddWeakness">Add</button>
+        <ul>
+            @foreach (var weak in characterToAdd.Weaknesses)
+            {
+                <li>@weak</li>
+            }
+        </ul>
+    </div>
+
+    <!-- Character Classes -->
+    <h4>Character Classes</h4>
+    <div class="form-group">
+        <label>Class Name</label>
+        <InputText class="form-control" @bind-Value="newCharacterClass.ClassName" />
+    </div>
+    <div class="form-group">
+        <label>Level</label>
+        <InputNumber class="form-control" @bind-Value="newCharacterClass.Level" />
+    </div>
+    <button type="button" class="btn btn-secondary btn-sm" @onclick="AddCharacterClass">Add Class</button>
+    <ul>
+        @foreach (var characterClass in characterClasses)
+        {
+            <li>@characterClass.ClassName (Level @characterClass.Level)</li>
+        }
+    </ul>
+
+    @if (!isPlayerCharacter)
+    {
+        <!-- DM-specific fields -->
+        <div class="form-group">
+            <label>Legendary Actions</label>
+            <InputText class="form-control" @bind-Value="((DMCharacter)characterToAdd).LegendaryActions" />
+        </div>
+        <div class="form-group">
+            <label>Special Abilities</label>
+            <InputText class="form-control" @bind-Value="((DMCharacter)characterToAdd).SpecialAbilities" />
+        </div>
+    }
+
+    <!-- Status -->
+    <h4>Status</h4>
+    <div class="form-group form-check">
+        <InputCheckbox class="form-check-input" @bind-Value="characterToAdd.IsAlive" />
+        <label class="form-check-label">Is Alive</label>
+    </div>
+    <div class="form-group form-check">
+        <InputCheckbox class="form-check-input" @bind-Value="characterToAdd.HasOver20Stats" />
+        <label class="form-check-label">Has Over 20 Stats</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string characterType { get; set; }
+
+    private CharacterBase characterToAdd;
+    private IBrowserFile fileToUpload;
+    private bool isPlayerCharacter;
+    private string selectedLanguage;
+    private string selectedResistance;
+    private string selectedWeakness;
+    private List<Enums.Languages> availableLanguages = Enum.GetValues<Enums.Languages>().ToList();
+    private List<Enums.DamageType> availableDamageTypes = Enum.GetValues<Enums.DamageType>().ToList();
+    private List<CharacterClass> characterClasses = new List<CharacterClass>();
+    private CharacterClass newCharacterClass = new CharacterClass(); // Initialize here
+
+    protected override void OnInitialized()
+    {
+        if (characterType.ToLower() == "player")
+        {
+            characterToAdd = new PlayerCharacter { IsAlive = true, CharacterClasses = new List<CharacterClass>() }; // Initialize collection
+            isPlayerCharacter = true;
+        }
+        else
+        {
+            characterToAdd = new DMCharacter { IsAlive = true, CharacterClasses = new List<CharacterClass>() }; // Initialize collection
+            isPlayerCharacter = false;
+        }
+
+        // Initialize selections
+        selectedLanguage = availableLanguages.First().ToString();
+        selectedResistance = availableDamageTypes.First().ToString();
+        selectedWeakness = availableDamageTypes.First().ToString();
+    }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        fileToUpload = e.File;
+    }
+
+    private void AddLanguage()
+    {
+        var language = Enum.Parse<Enums.Languages>(selectedLanguage);
+        if (!characterToAdd.KnownLanguages.Contains(language))
+        {
+            characterToAdd.KnownLanguages.Add(language);
+        }
+    }
+
+    private void AddResistance()
+    {
+        var resistance = Enum.Parse<Enums.DamageType>(selectedResistance);
+        if (!characterToAdd.Resistances.Contains(resistance))
+        {
+            characterToAdd.Resistances.Add(resistance);
+        }
+    }
+
+    private void AddWeakness()
+    {
+        var weakness = Enum.Parse<Enums.DamageType>(selectedWeakness);
+        if (!characterToAdd.Weaknesses.Contains(weakness))
+        {
+            characterToAdd.Weaknesses.Add(weakness);
+        }
+    }
+
+    private void AddCharacterClass()
+    {
+        if (!string.IsNullOrWhiteSpace(newCharacterClass.ClassName) && newCharacterClass.Level > 0)
+        {
+            if (isPlayerCharacter)
+            {
+                ((PlayerCharacter)characterToAdd).CharacterClasses.Add(newCharacterClass);
+            }
+            else
+            {
+                ((DMCharacter)characterToAdd).CharacterClasses.Add(newCharacterClass);
+            }
+
+            characterClasses.Add(newCharacterClass); // Also add to the local list for display purposes
+
+            // Reset the input for new class
+            newCharacterClass = new CharacterClass();
+
+            StateHasChanged(); // Ensure UI update
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        int characterId = 0;
+
+        if (isPlayerCharacter)
+        {
+            var playerCharacter = (PlayerCharacter)characterToAdd;
+
+            // Set up CharacterClasses properly
+            foreach (var characterClass in playerCharacter.CharacterClasses)
+            {
+                characterClass.PlayerCharacterId = playerCharacter.Id; // Make sure to set this if required by API
+            }
+
+            await PlayerCharacterService.AddPlayerCharacterAsync(playerCharacter);
+            characterId = playerCharacter.Id;
+        }
+        else
+        {
+            var dmCharacter = (DMCharacter)characterToAdd;
+
+            // Set up CharacterClasses properly
+            foreach (var characterClass in dmCharacter.CharacterClasses)
+            {
+                characterClass.DMCharacterId = dmCharacter.Id; // Make sure to set this if required by API
+            }
+
+            await DMCharacterService.AddDMCharacterAsync(dmCharacter);
+            characterId = dmCharacter.Id;
+        }
+
+        if (fileToUpload != null && characterId > 0)
+        {
+            await UploadFile(characterId, characterType.ToLower());
+        }
+
+        NavigationManager.NavigateTo("/all-characters");
+    }
+
+
+    private async Task UploadFile(int characterId, string characterType)
+    {
+        try
+        {
+            var client = HttpClientFactory.CreateClient("AuthorizedClient");
+
+            using (var content = new MultipartFormDataContent())
+            {
+                using (var streamContent = new StreamContent(fileToUpload.OpenReadStream(maxAllowedSize: 1024 * 1024 * 15))) // Allow up to 15 MB
+                {
+                    streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(fileToUpload.ContentType);
+                    content.Add(streamContent, "file", fileToUpload.Name);
+                    content.Add(new StringContent(characterId.ToString()), "characterId");
+                    content.Add(new StringContent(characterType), "characterType");
+
+                    var response = await client.PostAsync("files/upload", content);
+                    response.EnsureSuccessStatusCode(); // Throws if the HTTP response status is an error code.
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error uploading file: {ex.Message}");
+        }
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/all-characters");
+    }
+}

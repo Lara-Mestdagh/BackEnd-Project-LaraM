@@ -8,14 +8,24 @@ h1:focus {
     outline: none;
 }
 
+h5 {
+    font-size: 1.25rem;
+    font-style: unset;
+    padding-bottom: 0.2rem;
+}
+
+li {
+    padding-bottom: 0.1rem;
+}
+
 a, .btn-link {
     color: #0071c1;
 }
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #741bc2;
+    border-color: #8f11bc;
 }
 
 .content {

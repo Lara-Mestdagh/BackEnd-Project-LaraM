@@ -1,0 +1,124 @@
+@page "/player-character-details/{characterId:int}"
+@inject PlayerCharacterService PlayerCharacterService
+@inject NavigationManager NavigationManager
+@inject IHttpClientFactory HttpClientFactory
+@inject IConfiguration Configuration
+@inject IJSRuntime JS
+
+<h4>Player Character Details</h4>
+@if (character == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">@character.Name</h5>
+            <p class="card-subtitle text-muted">@character.Race</p>
+        </div>
+        <div class="card-body">
+            <!-- Basic Information -->
+            <p><strong>Player Name:</strong> @character.PlayerName</p>
+            <p><strong>HP:</strong> @character.CurrentHP / @character.MaxHP</p>
+            <p><strong>Armor Class:</strong> @character.ArmorClass</p>
+
+            <!-- Stats -->
+            <div class="row">
+                <div class="col-sm-4"><strong>Strength:</strong> @character.Strength (@character.StrengthModifier)</div>
+                <div class="col-sm-4"><strong>Dexterity:</strong> @character.Dexterity (@character.DexterityModifier)</div>
+                <div class="col-sm-4"><strong>Constitution:</strong> @character.Constitution (@character.ConstitutionModifier)</div>
+                <div class="col-sm-4"><strong>Intelligence:</strong> @character.Intelligence (@character.IntelligenceModifier)</div>
+                <div class="col-sm-4"><strong>Wisdom:</strong> @character.Wisdom (@character.WisdomModifier)</div>
+                <div class="col-sm-4"><strong>Charisma:</strong> @character.Charisma (@character.CharismaModifier)</div>
+            </div>
+            <br>
+
+            <!-- Speeds -->
+            <div class="row">
+                <div class="col-sm-4"><strong>Walking Speed:</strong> @character.WalkingSpeed ft.</div>
+                <div class="col-sm-4"><strong>Flying Speed:</strong> @(character.FlyingSpeed.HasValue ? character.FlyingSpeed + " ft." : "N/A")</div>
+                <div class="col-sm-4"><strong>Swimming Speed:</strong> @(character.SwimmingSpeed.HasValue ? character.SwimmingSpeed + " ft." : "N/A")</div>
+            </div>
+            <br>
+
+            <!-- Resistances and Weaknesses -->
+            <p><strong>Resistances:</strong> @(character.Resistances != null && character.Resistances.Any() ? string.Join(", ", character.Resistances) : "None")</p>
+            <p><strong>Weaknesses:</strong> @(character.Weaknesses != null && character.Weaknesses.Any() ? string.Join(", ", character.Weaknesses) : "None")</p>
+
+            <!-- Conditions -->
+            <h5>Conditions</h5>
+            <p>@(character.Conditions == null || !character.Conditions.Any() ? "None" : string.Join(", ", character.Conditions))</p>
+
+            <!-- Known Languages -->
+            <h5>Languages</h5>
+            <p>@(character.KnownLanguages.Any() ? string.Join(", ", character.KnownLanguages) : "None")</p>
+
+            <!-- Character Classes -->
+            <h5>Character Classes</h5>
+            @if (character.CharacterClasses != null && character.CharacterClasses.Any())
+            {
+                <ul>
+                    @foreach (var charClass in character.CharacterClasses)
+                    {
+                        <li>@charClass.ClassName (Level @charClass.Level)</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>None</p>
+            }
+
+            <!-- Back and Download Buttons -->
+            <button class="btn btn-link mt-3" @onclick="GoBack">Back</button>
+            <button class="btn btn-primary mt-3 ml-2" @onclick="DownloadCharacterSheet">Download as CSV</button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int characterId { get; set; }
+
+    private PlayerCharacter? character;
+
+    protected override async Task OnInitializedAsync()
+    {
+        character = await PlayerCharacterService.GetPlayerCharacterByIdAsync(characterId);
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/all-characters");
+    }
+
+    private async Task DownloadCharacterSheet()
+    {
+        var client = HttpClientFactory.CreateClient("AuthorizedClient");
+
+        var apiKey = Configuration["ApiSettings:ApiKey"];
+        var downloadUrl = $"files/download/character-sheet/{characterId}/csv";
+
+        try
+        {
+            var response = await client.GetAsync(downloadUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                var csvContent = await response.Content.ReadAsByteArrayAsync();
+
+                // Trigger the file download
+                var fileName = $"{character?.Name}_character_sheet.csv";
+                using var streamRef = new DotNetStreamReference(stream: new MemoryStream(csvContent));
+                await JS.InvokeVoidAsync("BlazorDownloadFile", fileName, streamRef);
+            }
+            else
+            {
+                Console.WriteLine($"Failed to download CSV: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred while downloading CSV: {ex.Message}");
+        }
+    }
+}

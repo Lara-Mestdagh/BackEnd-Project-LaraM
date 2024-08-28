@@ -1,55 +1,240 @@
 @page "/overview"
+@inject IHttpClientFactory HttpClientFactory
 
-<h3>Overview</h3>
+<h2>Party Overview</h2>
+<hr>
 
-<p>This page provides an overview of characters and shared inventory.</p>
-
+<!-- Player Characters Section -->
 <div>
-    <h4>Characters</h4>
-    @* A placeholder for character summaries *@
-    <ul>
-        @foreach (var character in characters)
-        {
-            <li>@character.Name (HP: @character.CurrentHP/@character.MaxHP)</li>
-        }
-    </ul>
+    <h4>Player Characters</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Race</th>
+                <th>Class</th>
+                <th>Level</th>
+                <th>Current HP</th>
+                <th>Max HP</th>
+                <th>Armor Class</th>
+                <th>Speed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var character in playerCharacters)
+            {
+                <tr>
+                    <td>
+                        <img src="@GetCharacterImage(character)" alt="Character Image" style="width: 60px; height: 60px;" />
+                    </td>
+                    <td>@character.Name</td>
+                    <td>@character.Race</td>
+                    <td>@(character.CharacterClasses != null ? string.Join(", ", character.CharacterClasses.Select(c => c.ClassName)) : "N/A")</td>
+                    <td>@(character.CharacterClasses != null && character.CharacterClasses.Any() ? character.CharacterClasses.First().Level : 0)</td>
+                    <td>@character.CurrentHP</td>
+                    <td>@character.MaxHP</td>
+                    <td>@character.ArmorClass</td>
+                    <td>@character.WalkingSpeed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
+<!-- DM Characters Section -->
+<div>
+    <h4>DM Characters</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Race</th>
+                <th>Class</th>
+                <th>Level</th>
+                <th>Current HP</th>
+                <th>Max HP</th>
+                <th>Armor Class</th>
+                <th>Speed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var character in dmCharacters)
+            {
+                <tr>
+                    <td>
+                        <img src="@GetCharacterImage(character)" alt="Character Image" style="width: 60px; height: 60px;" />
+                    </td>
+                    <td>@character.Name</td>
+                    <td>@character.Race</td>
+                    <td>@(character.CharacterClasses != null ? string.Join(", ", character.CharacterClasses.Select(c => c.ClassName)) : "N/A")</td>
+                    <td>@(character.CharacterClasses != null && character.CharacterClasses.Any() ? character.CharacterClasses.First().Level : 0)</td>
+                    <td>@character.CurrentHP</td>
+                    <td>@character.MaxHP</td>
+                    <td>@character.ArmorClass</td>
+                    <td>@character.WalkingSpeed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Shared Inventory Section -->
 <div>
     <h4>Shared Inventory</h4>
-    @* A placeholder for shared inventory items *@
-    <ul>
-        @foreach (var item in sharedInventory)
-        {
-            <li>@item.Name - Quantity: @item.Quantity</li>
-        }
-    </ul>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in sharedInventory)
+            {
+                <tr>
+                    <td>@item.ItemName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Weight.ToString("F2") @item.WeightUnit</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 @code {
-    // Mock data
-    private List<Character> characters = new List<Character>
-    {
-        new Character { Name = "Aragorn", CurrentHP = 50, MaxHP = 100 },
-        new Character { Name = "Legolas", CurrentHP = 70, MaxHP = 80 },
-    };
+    private List<PlayerCharacter> playerCharacters = new List<PlayerCharacter>();
+    private List<DMCharacter> dmCharacters = new List<DMCharacter>();
+    private List<InventoryItem> sharedInventory = new List<InventoryItem>();
 
-    private List<Item> sharedInventory = new List<Item>
+    protected override async Task OnInitializedAsync()
     {
-        new Item { Name = "Healing Potion", Quantity = 5 },
-        new Item { Name = "Gold Coins", Quantity = 100 },
-    };
+        var client = HttpClientFactory.CreateClient("AuthorizedClient");
 
-    public class Character
-    {
-        public string Name { get; set; } = string.Empty;  // Initialize with a default value
-        public int CurrentHP { get; set; }
-        public int MaxHP { get; set; }
+        var query = new GraphQLRequest
+        {
+            Query = @"
+                query {
+                getPlayerCharacters {
+                    id
+                    name
+                    race
+                    imagePath
+                    playerName
+                    strength
+                    dexterity
+                    constitution
+                    intelligence
+                    wisdom
+                    charisma
+                    maxHP
+                    currentHP
+                    tempHP
+                    armorClass
+                    walkingSpeed
+                    knownLanguages
+                    resistances
+                    weaknesses
+                    conditions
+                    characterClasses {
+                    className
+                    level
+                    }
+                }
+                getDMCharacters {
+                    id
+                    name
+                    race
+                    imagePath
+                    strength
+                    dexterity
+                    constitution
+                    intelligence
+                    wisdom
+                    charisma
+                    maxHP
+                    currentHP
+                    tempHP
+                    armorClass
+                    walkingSpeed
+                    knownLanguages
+                    resistances
+                    weaknesses
+                    conditions
+                    legendaryActions
+                    specialAbilities
+                    characterClasses {
+                    className
+                    level
+                    }
+                }
+                getSharedInventory {
+                    inventoryItems {
+                    id
+                    itemName
+                    quantity
+                    weight
+                    weightUnit
+                    }
+                }
+                }"
+        };
+
+        var response = await client.PostAsJsonAsync("graphql", query);
+        if (response.IsSuccessStatusCode)
+        {
+            var graphQLResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            if (graphQLResponse != null && graphQLResponse.Data != null)
+            {
+                playerCharacters = graphQLResponse.Data.GetPlayerCharacters.ToList();
+                dmCharacters = graphQLResponse.Data.GetDMCharacters.ToList();
+                sharedInventory = (graphQLResponse.Data.GetSharedInventory.InventoryItems?.Select(dto => new InventoryItem
+                {
+                    Id = dto.Id,
+                    PlayerCharacterId = dto.PlayerCharacterId,
+                    DMCharacterId = dto.DMCharacterId,
+                    SharedInventoryId = dto.SharedInventoryId,
+                    ItemName = dto.ItemName,
+                    Quantity = dto.Quantity,
+                    Weight = dto.Weight,
+                    WeightUnit = dto.WeightUnit
+                }) ?? Enumerable.Empty<InventoryItem>()).ToList();
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Error fetching data: {response.StatusCode} - {response.ReasonPhrase}");
+        }
     }
 
-    public class Item
+    private string GetCharacterImage(CharacterBase character)
     {
-        public string Name { get; set; } = string.Empty;  // Initialize with a default value
-        public int Quantity { get; set; }
+        string baseImagePath = "images/";
+
+        string fileName = !string.IsNullOrEmpty(character.ImagePath) 
+            ? Path.GetFileName(character.ImagePath)
+            : "grey_portrait.jpg";
+
+        return $"{baseImagePath}{fileName}";
     }
+
+    public class ApiResponse
+    {
+        public Data Data { get; set; } = new Data();
+    }
+
+    public class Data
+    {
+        public List<PlayerCharacter> GetPlayerCharacters { get; set; } = new List<PlayerCharacter>();
+        public List<DMCharacter> GetDMCharacters { get; set; } = new List<DMCharacter>();
+        public SharedInventory GetSharedInventory { get; set; } = new SharedInventory();
+    }
+
+    public class GraphQLRequest
+    {
+        public string Query { get; set; } = string.Empty;
+    }
+
 }

@@ -27,21 +27,28 @@ public class FileController : ControllerBase
     public async Task<IActionResult> UploadCharacterImage(
         IFormFile file,
         [FromForm] int characterId,
-        [FromForm] string characterType)
+        [FromForm] string type)
     {
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded.");
 
-        if (characterId <= 0 || string.IsNullOrEmpty(characterType) || !(characterType == "player" || characterType == "dm"))
-            return BadRequest("Invalid characterId or characterType.");
+        if (characterId <= 0 || string.IsNullOrEmpty(type) || !(type == "player" || type == "dm"))
+            return BadRequest("Invalid characterId or type.");
 
         try
         {
             // Generate a unique file name to prevent collisions
             var uniqueFileName = System.IO.Path.GetRandomFileName();
             var fileExtension = System.IO.Path.GetExtension(file.FileName);
-            var filePath = System.IO.Path.Combine("Images", uniqueFileName + fileExtension);
+            var filePath = System.IO.Path.Combine("../../BD-Project-LaraM/DnD_Character_Overview_Client/DnD_CO_Blazor/wwwroot/Images", uniqueFileName + fileExtension);
 
+            // Ensure the directory exists
+            var directory = System.IO.Path.GetDirectoryName(filePath);
+            if (!System.IO.Directory.Exists(directory))
+            {
+                System.IO.Directory.CreateDirectory(directory);
+            }
+            
             // Save the file to the server
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -49,7 +56,7 @@ public class FileController : ControllerBase
             }
 
             // Update the character's image path in the database
-            if (characterType == "player")
+            if (type == "player")
             {
                 var character = await _playerCharacterService.GetByIdAsync(characterId);
                 if (character != null)
@@ -58,7 +65,7 @@ public class FileController : ControllerBase
                     await _playerCharacterService.UpdateAsync(character);
                 }
             }
-            else if (characterType == "dm")
+            else if (type == "dm")
             {
                 var character = await _dmCharacterService.GetByIdAsync(characterId);
                 if (character != null)
@@ -79,9 +86,14 @@ public class FileController : ControllerBase
 
     // GET /api/files/download/inventory/{characterId}/{format} – Download a character’s inventory in the specified format (CSV or PDF).
     [HttpGet("download/inventory/{characterId}/{format}")]
-    public async Task<IActionResult> DownloadInventory(int characterId, string format)
+    public async Task<IActionResult> DownloadInventory(int characterId, string format, [FromHeader(Name = "type")] string type)
     {
-        var inventoryItems = await _inventoryService.GetInventoryItemsForCharacterAsync(characterId);
+        if (string.IsNullOrEmpty(type) || !(type == "player" || type == "dm"))
+        {
+            return BadRequest("Invalid type. Must be 'player' or 'dm'.");
+        }
+
+        var inventoryItems = await _inventoryService.GetInventoryItemsForCharacterAsync(characterId, type);
 
         if (format.ToLower() == "csv")
         {
@@ -149,42 +161,42 @@ public class FileController : ControllerBase
         var csvBuilder = new StringBuilder();
 
         // Add basic character info
-    csvBuilder.AppendLine("Character Information");
-    csvBuilder.AppendLine("Name,Race,Class,Level");
-    csvBuilder.AppendLine($"{character.Name},{character.Race},{character.CharacterClasses?.FirstOrDefault()?.ClassName ?? "N/A"},{character.CharacterClasses?.FirstOrDefault()?.Level ?? 0}");
+        csvBuilder.AppendLine("Character Information");
+        csvBuilder.AppendLine("Name,Race,Class,Level");
+        csvBuilder.AppendLine($"{character.Name},{character.Race},{character.CharacterClasses?.FirstOrDefault()?.ClassName ?? "N/A"},{character.CharacterClasses?.FirstOrDefault()?.Level ?? 0}");
 
-    // Add headers for stats
-    csvBuilder.AppendLine();
-    csvBuilder.AppendLine("Character Stats");
-    csvBuilder.AppendLine("Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma");
-    csvBuilder.AppendLine($"{character.Strength},{character.Dexterity},{character.Constitution},{character.Intelligence},{character.Wisdom},{character.Charisma}");
+        // Add headers for stats
+        csvBuilder.AppendLine();
+        csvBuilder.AppendLine("Character Stats");
+        csvBuilder.AppendLine("Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma");
+        csvBuilder.AppendLine($"{character.Strength},{character.Dexterity},{character.Constitution},{character.Intelligence},{character.Wisdom},{character.Charisma}");
 
-    // Add headers for health and armor
-    csvBuilder.AppendLine();
-    csvBuilder.AppendLine("Health and Armor");
-    csvBuilder.AppendLine("MaxHP,CurrentHP,TempHP,ArmorClass");
-    csvBuilder.AppendLine($"{character.MaxHP},{character.CurrentHP ?? 0},{character.TempHP},{character.ArmorClass}");
+        // Add headers for health and armor
+        csvBuilder.AppendLine();
+        csvBuilder.AppendLine("Health and Armor");
+        csvBuilder.AppendLine("MaxHP,CurrentHP,TempHP,ArmorClass");
+        csvBuilder.AppendLine($"{character.MaxHP},{character.CurrentHP ?? 0},{character.TempHP},{character.ArmorClass}");
 
-    // Add headers for speed and vision
-    csvBuilder.AppendLine();
-    csvBuilder.AppendLine("Movement and Vision");
-    csvBuilder.AppendLine("WalkingSpeed,FlyingSpeed,SwimmingSpeed,DarkvisionRange");
-    csvBuilder.AppendLine($"{character.WalkingSpeed},{character.FlyingSpeed ?? 0},{character.SwimmingSpeed ?? 0},{character.DarkvisionRange ?? 0}");
+        // Add headers for speed and vision
+        csvBuilder.AppendLine();
+        csvBuilder.AppendLine("Movement and Vision");
+        csvBuilder.AppendLine("WalkingSpeed,FlyingSpeed,SwimmingSpeed,DarkvisionRange");
+        csvBuilder.AppendLine($"{character.WalkingSpeed},{character.FlyingSpeed ?? 0},{character.SwimmingSpeed ?? 0},{character.DarkvisionRange ?? 0}");
 
-    // Add headers for additional properties
-    csvBuilder.AppendLine();
-    csvBuilder.AppendLine("Additional Properties");
-    csvBuilder.AppendLine("KnownLanguages,Resistances,Weaknesses,Conditions");
+        // Add headers for additional properties
+        csvBuilder.AppendLine();
+        csvBuilder.AppendLine("Additional Properties");
+        csvBuilder.AppendLine("KnownLanguages,Resistances,Weaknesses,Conditions");
 
-    // Format lists as readable strings
-    string knownLanguages = character.KnownLanguages != null ? string.Join(";", character.KnownLanguages) : "None";
-    string resistances = character.Resistances != null ? string.Join(";", character.Resistances) : "None";
-    string weaknesses = character.Weaknesses != null ? string.Join(";", character.Weaknesses) : "None";
-    string conditions = character.Conditions != null ? string.Join(";", character.Conditions) : "None";
+        // Format lists as readable strings
+        string knownLanguages = character.KnownLanguages != null ? string.Join(";", character.KnownLanguages) : "None";
+        string resistances = character.Resistances != null ? string.Join(";", character.Resistances) : "None";
+        string weaknesses = character.Weaknesses != null ? string.Join(";", character.Weaknesses) : "None";
+        string conditions = character.Conditions != null ? string.Join(";", character.Conditions) : "None";
 
-    // Add additional properties as comma-separated lists
-    csvBuilder.AppendLine($"{knownLanguages},{resistances},{weaknesses},{conditions}");
+        // Add additional properties as comma-separated lists
+        csvBuilder.AppendLine($"{knownLanguages},{resistances},{weaknesses},{conditions}");
 
-    return csvBuilder.ToString();
+        return csvBuilder.ToString();
     }
 }
