@@ -37,10 +37,9 @@ public class CharacterStatusMonitoringService : BackgroundService
                     var playerCharacters = await playerCharacterService.GetAllAsync();
                     foreach (var character in playerCharacters)
                     {
-                        if (character.CurrentHP < 10) // Example condition
+                        if (character.CurrentHP < character.MaxHP / 5)
                         {
                             _logger.LogWarning($"Character {character.Name} is low on HP.");
-                            // Trigger notification or other actions
                         }
                     }
 
@@ -48,10 +47,9 @@ public class CharacterStatusMonitoringService : BackgroundService
                     var dmCharacters = await dmCharacterService.GetAllAsync();
                     foreach (var character in dmCharacters)
                     {
-                        if (character.IsAlive == false) // Example condition
+                        if (character.IsAlive == false) 
                         {
                             _logger.LogWarning($"Character {character.Name} is no longer alive.");
-                            // Trigger notification or other actions
                         }
                     }
                 }

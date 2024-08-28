@@ -7,8 +7,6 @@ public class PlayerCharacter : CharacterBase
     [StringLength(255)]
     public string? PlayerName { get; set; } // IRL player properties
     public ICollection<CharacterClass>? CharacterClasses { get; set; } // Character's class(es)
-
-    // Additional properties or methods specific to PlayerCharacter can be added here
 }
 
 // From base class
@@ -38,7 +36,6 @@ public class PlayerCharacter : CharacterBase
 // - IsAlive (bool)
 // - HasOver20Stats (bool)
 // - KnownLanguages (List<string>)
-// - CharacterClasses (ICollection<CharacterClass>?)
 // - InventoryItems (ICollection<InventoryItem>?)
 
 // Methods inherited from CharacterBase:

@@ -14,6 +14,7 @@ public class AddStaticHeaderOperationFilter : IOperationFilter
 
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
+        // If there are no parameters, create a new list
         if (operation.Parameters == null)
             operation.Parameters = new List<OpenApiParameter>();
 

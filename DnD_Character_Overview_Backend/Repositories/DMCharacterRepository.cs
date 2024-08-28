@@ -60,7 +60,7 @@ public class DMCharacterRepository : IDMCharacterRepository
         }
 
         character.IsAlive = false;
-        await UpdateAsync(character);  // Reuse the update method
+        await UpdateAsync(character); 
         
     }
 

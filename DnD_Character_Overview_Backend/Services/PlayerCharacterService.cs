@@ -12,7 +12,6 @@ public class PlayerCharacterService : IPlayerCharacterService
     private readonly IMemoryCache _cache; 
     private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30); 
 
-    // Constructor
     public PlayerCharacterService(IPlayerCharacterRepository repository, ICharacterClassRepository classRepository, IMemoryCache cache)
     {
         _repository = repository;
@@ -29,7 +28,7 @@ public class PlayerCharacterService : IPlayerCharacterService
         {
             characters = await _repository.GetAllAsync();
             
-            // Fetch and include character classes for each character
+            // Fetch and include character classes
             foreach (var character in characters)
             {
                 character.CharacterClasses = (await _classRepository.GetClassesByPlayerCharacterIdAsync(character.Id)).ToList();
@@ -56,7 +55,7 @@ public class PlayerCharacterService : IPlayerCharacterService
 
             if (character != null)
             {
-                // Fetch and include character classes for the specific character
+                // Fetch and include character classes
                 character.CharacterClasses = (await _classRepository.GetClassesByPlayerCharacterIdAsync(character.Id)).ToList();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions
@@ -80,7 +79,6 @@ public class PlayerCharacterService : IPlayerCharacterService
 
         await _repository.AddAsync(playerCharacter);
 
-        // Optionally add classes to CharacterClassRepository if provided
         if (playerCharacter.CharacterClasses != null && playerCharacter.CharacterClasses.Any())
         {
             await _classRepository.AddClassesToPlayerCharacterAsync(playerCharacter.Id, playerCharacter.CharacterClasses);
@@ -104,7 +102,6 @@ public class PlayerCharacterService : IPlayerCharacterService
 
         await _repository.UpdateAsync(playerCharacter);
 
-        // Optionally update classes in CharacterClassRepository if provided
         if (playerCharacter.CharacterClasses != null && playerCharacter.CharacterClasses.Any())
         {
             await _classRepository.UpdateClassesAsync(playerCharacter.CharacterClasses);

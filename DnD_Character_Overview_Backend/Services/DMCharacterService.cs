@@ -12,7 +12,6 @@ public class DMCharacterService : IDMCharacterService
     private readonly IMemoryCache _cache;
     private readonly TimeSpan _cacheDuration = TimeSpan.FromMinutes(30); // Current cache duration is 30 minutes
 
-    // Constructor
     public DMCharacterService(IDMCharacterRepository repository, ICharacterClassRepository classRepository, IMemoryCache cache)
     {
         _repository = repository;
@@ -29,7 +28,7 @@ public class DMCharacterService : IDMCharacterService
         {
             characters = await _repository.GetAllAsync();
 
-            // Fetch and include character classes for each DM character
+            // Fetch and include character classes
             foreach (var character in characters)
             {
                 character.CharacterClasses = (await _classRepository.GetClassesByDMCharacterIdAsync(character.Id)).ToList();
@@ -56,7 +55,7 @@ public class DMCharacterService : IDMCharacterService
 
             if (character != null)
             {
-                // Fetch and include character classes for the specific DM character
+                // Fetch and include character classes
                 character.CharacterClasses = (await _classRepository.GetClassesByDMCharacterIdAsync(character.Id)).ToList();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions
@@ -80,7 +79,6 @@ public class DMCharacterService : IDMCharacterService
 
         await _repository.AddAsync(dmCharacter);
 
-        // Optionally add classes to CharacterClassRepository if provided
         if (dmCharacter.CharacterClasses != null && dmCharacter.CharacterClasses.Any())
         {
             await _classRepository.AddClassesToDMCharacterAsync(dmCharacter.Id, dmCharacter.CharacterClasses);
@@ -104,7 +102,6 @@ public class DMCharacterService : IDMCharacterService
 
         await _repository.UpdateAsync(dmCharacter);
 
-        // Optionally update classes in CharacterClassRepository if provided
         if (dmCharacter.CharacterClasses != null && dmCharacter.CharacterClasses.Any())
         {
             await _classRepository.UpdateClassesAsync(dmCharacter.CharacterClasses);

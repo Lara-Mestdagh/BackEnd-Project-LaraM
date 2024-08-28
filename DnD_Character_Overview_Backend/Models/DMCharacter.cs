@@ -9,9 +9,6 @@ public class DMCharacter : CharacterBase
     // Special abilities and actions
     public string? LegendaryActions { get; set; } // Legendary actions for powerful NPCs or monsters
     public string? SpecialAbilities { get; set; } // Special abilities for the character
-
-
-    // Additional properties or methods specific to DMCharacter can be added here
 }
 
 // From base class
@@ -41,7 +38,6 @@ public class DMCharacter : CharacterBase
 // - IsAlive (bool)
 // - HasOver20Stats (bool)
 // - KnownLanguages (List<string>)
-// - CharacterClasses (ICollection<CharacterClass>?)
 // - InventoryItems (ICollection<InventoryItem>?)
 
 // Methods inherited from CharacterBase:

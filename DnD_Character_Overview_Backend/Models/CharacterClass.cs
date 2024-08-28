@@ -22,7 +22,7 @@ public class CharacterClass
     public int Level { get; set; }
 
     public PlayerCharacter? PlayerCharacter { get; set; }
-    public DMCharacter? DMCharacter { get; set; }  // Add this property
+    public DMCharacter? DMCharacter { get; set; }  
 }
 
 // Since multi-classing is an option, 

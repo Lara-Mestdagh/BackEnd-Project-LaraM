@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Controllers;
 
@@ -10,6 +11,9 @@ public class ErrorController : ControllerBase
     [Route("error")]
     public IActionResult HandleError()
     {
+        // Log the error
+        Serilog.Log.Error("An error occurred in the application.");
+
         // Your error handling logic here
         return Problem();
     }

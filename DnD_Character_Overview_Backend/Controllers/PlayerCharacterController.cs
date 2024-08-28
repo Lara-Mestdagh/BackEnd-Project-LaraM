@@ -8,9 +8,8 @@ namespace Controllers;
 [Route("api/{version:apiVersion}/player-characters")]
 public class PlayerCharacterController : ControllerBase
 {
-    // Services
     private readonly IPlayerCharacterService _service;
-    private readonly IMapper _mapper; // Add AutoMapper
+    private readonly IMapper _mapper;
 
     // Constructor
     public PlayerCharacterController(IPlayerCharacterService service, IMapper mapper)

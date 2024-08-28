@@ -45,10 +45,10 @@ public class InventoryService : IInventoryService
         if (item != null)
         {
             await _repository.DeleteInventoryItemAsync(item);
-            return true;  // Return true to indicate the item was successfully deleted
+            return true;  
         }
         
-        return false;  // Return false to indicate the item was not found and thus not deleted
+        return false; 
     }
 
     // Retrieve the shared inventory

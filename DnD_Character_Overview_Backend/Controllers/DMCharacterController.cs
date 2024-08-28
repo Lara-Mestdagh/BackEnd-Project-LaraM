@@ -8,7 +8,6 @@ namespace Controllers;
 [Route("api/{version:apiVersion}/dm-characters")]
 public class DMCharacterController : ControllerBase
 {
-    // Service
     private readonly IDMCharacterService _service;
     private readonly IMapper _mapper;
 

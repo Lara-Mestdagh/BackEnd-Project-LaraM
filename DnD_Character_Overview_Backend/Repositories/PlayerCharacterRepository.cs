@@ -4,10 +4,8 @@ namespace Repositories;
 
 public class PlayerCharacterRepository : IPlayerCharacterRepository
 {
-    // Database context
     private readonly ApplicationDbContext _context;
 
-    // Constructor
     public PlayerCharacterRepository(ApplicationDbContext context)
     {
         _context = context;
@@ -24,7 +22,7 @@ public class PlayerCharacterRepository : IPlayerCharacterRepository
         // Check if the character exists and id is valid
         if (id <= 0)
         {
-            return null;  // Handle this at the service or controller level
+            return null; 
         }
 
         return await _context.PlayerCharacters.FirstOrDefaultAsync(pc => pc.Id == id);
@@ -45,7 +43,7 @@ public class PlayerCharacterRepository : IPlayerCharacterRepository
     {
         if (playerCharacter == null)
         {
-            return;  // Same here, generally handle null validation before reaching the repository
+            return; 
         }
 
         _context.PlayerCharacters.Update(playerCharacter);
@@ -57,11 +55,11 @@ public class PlayerCharacterRepository : IPlayerCharacterRepository
         var character = await GetByIdAsync(id);
         if (character == null)
         {
-            return;  // Again, handle this null case at a higher level
+            return;  
         }
 
         character.IsAlive = false;
-        await UpdateAsync(character);  // Reuse the update method
+        await UpdateAsync(character);
     }
 
     // Check if a character exists

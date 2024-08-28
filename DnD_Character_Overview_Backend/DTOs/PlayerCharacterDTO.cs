@@ -43,6 +43,6 @@ public class PlayerCharacterDTO
     // Player-specific properties
     public string? PlayerName { get; set; }
 
-    // Optional properties related to character classes and inventory
+    // Optional properties related to character classes
     public ICollection<CharacterClassDTO> CharacterClasses { get; set; } = new List<CharacterClassDTO>();
 }

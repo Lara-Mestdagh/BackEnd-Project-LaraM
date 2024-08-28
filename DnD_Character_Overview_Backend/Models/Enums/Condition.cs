@@ -17,5 +17,4 @@ public enum Conditions
     Restrained,
     Stunned,
     Unconscious
-    // Add any other conditions as needed
 }
