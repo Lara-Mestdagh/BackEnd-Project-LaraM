@@ -11,14 +11,16 @@ using Interfaces;
 public class PlayerCharacterServiceTests
 {
     private readonly Mock<IPlayerCharacterRepository> _mockRepository;
+    private readonly Mock<ICharacterClassRepository> _mockClassRepository;
     private readonly IMemoryCache _cache;
     private readonly PlayerCharacterService _service;
 
     public PlayerCharacterServiceTests()
     {
         _mockRepository = new Mock<IPlayerCharacterRepository>();
+        _mockClassRepository = new Mock<ICharacterClassRepository>();
         _cache = new MemoryCache(new MemoryCacheOptions());
-        _service = new PlayerCharacterService(_mockRepository.Object, _cache);
+        _service = new PlayerCharacterService(_mockRepository.Object, _mockClassRepository.Object, _cache);
     }
 
     [Fact]

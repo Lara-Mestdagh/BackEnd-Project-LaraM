@@ -17,6 +17,13 @@ public class IntegrationTests
         _client.DefaultRequestHeaders.Add("X-API-KEY", "R1RZTUdKTldHWUtCUkZZVVBTUENWSE5CUlZXRFFTTE9NTU1VS05BQUlSV0RJWUJPT1U=");
     }
 
+    // Add type header to inventory requests
+    private void AddTypeHeader(HttpClient client, string type)
+    {
+        client.DefaultRequestHeaders.Remove("type"); // Ensure old header is removed if present
+        client.DefaultRequestHeaders.Add("type", type);
+    }
+
     // CHARACTER ENDPOINT TESTS
     [Fact]
     public async Task TestGetDMCharacters()
@@ -366,6 +373,7 @@ public class IntegrationTests
     [Fact]
     public async Task TestGetInventoryForCharacter()
     {
+        AddTypeHeader(_client, "player"); // Add type header
         int characterId = 1; // Example ID
         var response = await _client.GetAsync($"/api/v5/characters/{characterId}/inventory");
         response.EnsureSuccessStatusCode();
@@ -376,6 +384,7 @@ public class IntegrationTests
     [Fact]
     public async Task TestAddInventoryItem()
     {
+        AddTypeHeader(_client, "player"); // Add type header
         int characterId = 1; // Example ID
         var newItem = new { ItemName = "Health Potion", Quantity = 1, Weight = 0.5 };
         var content = new StringContent(JsonConvert.SerializeObject(newItem), Encoding.UTF8, "application/json");
@@ -389,6 +398,7 @@ public class IntegrationTests
     [Fact]
     public async Task TestUpdateInventoryItem()
     {
+        AddTypeHeader(_client, "player"); // Add type header
         int characterId = 1; // Example character ID
         int sharedInventoryId = 1; // Example shared inventory ID
 
@@ -435,6 +445,7 @@ public class IntegrationTests
     [Fact]
     public async Task TestDeleteInventoryItem()
     {
+        AddTypeHeader(_client, "player"); // Add type header
         int characterId = 1; // Example character ID
         int sharedInventoryId = 1; // Example shared inventory ID
 
@@ -480,19 +491,22 @@ public class IntegrationTests
         // Create a new multipart form data content to simulate file upload
         var formData = new MultipartFormDataContent();
 
-        // Example byte array representing the file content (dummy content for illustration)
-        byte[] fileBytes = Encoding.UTF8.GetBytes("dummy_file_content");
+        // Make sure the path is correct and the file exists
+        string filePath = @"D:/Documents/MCT/Semester_4/Backend_Dev/Project/BD-Project-LaraM/DnD_Character_Overview_Tests/goblin.png"; // Change this to the actual path of your file
+        
+        // Read the actual image file into a byte array
+        byte[] fileBytes = File.ReadAllBytes(filePath);
 
         // Create ByteArrayContent from the file byte array
         var fileContent = new ByteArrayContent(fileBytes);
-        fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png"); // Ensure correct content type
 
         // Add the file content to the form data with proper metadata
         formData.Add(fileContent, "file", "goblin.png");
 
-        // Add playerId and characterType as required by the API
-        formData.Add(new StringContent("1"), "characterId"); // Example player ID
-        formData.Add(new StringContent("player"), "characterType"); // Example character type
+        // Add characterId and characterType as required by the API
+        formData.Add(new StringContent("2"), "characterId"); // Example character ID
+        formData.Add(new StringContent("dm"), "type"); // Example character type
 
         // Send the POST request to upload the file
         var response = await _client.PostAsync("/api/v5/files/upload", formData);
@@ -515,6 +529,7 @@ public class IntegrationTests
     [Fact]
     public async Task TestDownloadInventory()
     {
+        AddTypeHeader(_client, "player"); // Add type header
         int characterId = 1; // Example ID
         var format = "csv"; // or "pdf"
         var response = await _client.GetAsync($"/api/v5/files/download/inventory/{characterId}/{format}");

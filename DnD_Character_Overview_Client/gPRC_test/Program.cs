@@ -11,6 +11,7 @@ var apiKey = "R1RZTUdKTldHWUtCUkZZVVBTUENWSE5CUlZXRFFTTE9NTU1VS05BQUlSV0RJWUJPT1
 var callCredentials = CallCredentials.FromInterceptor((context, metadata) =>
 {
     metadata.Add("X-API-KEY", apiKey); // Add your API key here with the appropriate header name
+    // Remove type from headers if it's only needed in the body
     return Task.CompletedTask;
 });
 
@@ -44,7 +45,11 @@ try
     int testCharacterId = 1; // Replace with an actual character ID to test
 
     // 1. Get all inventory items for a character
-    var getInventoryResponse = await inventoryClient.GetInventoryItemsAsync(new GetInventoryItemsRequest { CharacterId = testCharacterId });
+    var getInventoryResponse = await inventoryClient.GetInventoryItemsAsync(new GetInventoryItemsRequest 
+    { 
+        CharacterId = testCharacterId, 
+        Type = "player" // Set the type in the request body
+    });
     Console.WriteLine($"Inventory items for Character ID {testCharacterId}:");
     foreach (var item in getInventoryResponse.Items)
     {
@@ -53,7 +58,12 @@ try
 
     // 2. Get a specific inventory item by ID
     int testItemId = 1; // Replace with an actual item ID to test
-    var getItemResponse = await inventoryClient.GetInventoryItemByIdAsync(new GetInventoryItemByIdRequest { CharacterId = testCharacterId, ItemId = testItemId });
+    var getItemResponse = await inventoryClient.GetInventoryItemByIdAsync(new GetInventoryItemByIdRequest 
+    { 
+        CharacterId = testCharacterId, 
+        ItemId = testItemId, 
+        Type = "player" // Set the type in the request body
+    });
     Console.WriteLine($"Inventory item details for Item ID {testItemId}: Name: {getItemResponse.Item.Name}, Quantity: {getItemResponse.Item.Quantity}");
 
     // 3. Add a new inventory item
@@ -87,7 +97,12 @@ try
     Console.WriteLine($"Update Inventory Item Response: Success: {updateItemResponse.Success}");
 
     // 5. Delete an inventory item
-    var deleteItemResponse = await inventoryClient.DeleteInventoryItemAsync(new DeleteInventoryItemRequest { CharacterId = testCharacterId, ItemId = testItemId });
+    var deleteItemResponse = await inventoryClient.DeleteInventoryItemAsync(new DeleteInventoryItemRequest 
+    { 
+        CharacterId = testCharacterId, 
+        ItemId = testItemId, 
+        Type = "player" // Set the type in the request body
+    });
     Console.WriteLine($"Delete Inventory Item Response: Success: {deleteItemResponse.Success}");
 }
 catch (RpcException e)

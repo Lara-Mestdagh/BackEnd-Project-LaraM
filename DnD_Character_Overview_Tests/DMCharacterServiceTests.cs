@@ -11,14 +11,16 @@ using Interfaces;
 public class DMCharacterServiceTests
 {
     private readonly Mock<IDMCharacterRepository> _mockRepository;
+    private readonly Mock<ICharacterClassRepository> _mockClassRepository;
     private readonly IMemoryCache _cache;
     private readonly DMCharacterService _service;
 
     public DMCharacterServiceTests()
     {
         _mockRepository = new Mock<IDMCharacterRepository>();
+        _mockClassRepository = new Mock<ICharacterClassRepository>();
         _cache = new MemoryCache(new MemoryCacheOptions());
-        _service = new DMCharacterService(_mockRepository.Object, _cache);
+        _service = new DMCharacterService(_mockRepository.Object, _mockClassRepository.Object, _cache);
     }
 
     [Fact]

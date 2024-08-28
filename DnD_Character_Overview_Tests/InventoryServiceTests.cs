@@ -7,6 +7,7 @@ using Repositories;
 using Models; 
 using Interfaces;
 using System;
+using System.Linq;
 
 public class InventoryServiceTests
 {
@@ -24,21 +25,24 @@ public class InventoryServiceTests
     {
         // Arrange
         int characterId = 1;
+        string type = "player"; // Add type parameter
         var items = new List<InventoryItem>
         {
             new InventoryItem { Id = 1, ItemName = "Sword", Quantity = 1 },
             new InventoryItem { Id = 2, ItemName = "Shield", Quantity = 1 }
         };
 
-        _mockRepository.Setup(repo => repo.GetInventoryItemsForCharacterAsync(characterId)).ReturnsAsync(items);
+        // Setup mock to include type parameter
+        _mockRepository.Setup(repo => repo.GetInventoryItemsForCharacterAsync(characterId, type))
+                       .ReturnsAsync(items);
 
         // Act
-        var result = await _service.GetInventoryItemsForCharacterAsync(characterId);
+        var result = await _service.GetInventoryItemsForCharacterAsync(characterId, type);
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Count());
-        _mockRepository.Verify(repo => repo.GetInventoryItemsForCharacterAsync(characterId), Times.Once);
+        _mockRepository.Verify(repo => repo.GetInventoryItemsForCharacterAsync(characterId, type), Times.Once);
     }
 
     [Fact]
@@ -47,17 +51,20 @@ public class InventoryServiceTests
         // Arrange
         int characterId = 1;
         int itemId = 1;
+        string type = "player"; // Add type parameter
         var item = new InventoryItem { Id = 1, ItemName = "Sword", Quantity = 1 };
 
-        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(characterId, itemId)).ReturnsAsync(item);
+        // Setup mock to include type parameter
+        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(characterId, itemId, type))
+                       .ReturnsAsync(item);
 
         // Act
-        var result = await _service.GetInventoryItemByIdAsync(characterId, itemId);
+        var result = await _service.GetInventoryItemByIdAsync(characterId, itemId, type);
 
         // Assert
         Assert.NotNull(result);
         Assert.Equal("Sword", result.ItemName);
-        _mockRepository.Verify(repo => repo.GetInventoryItemByIdAsync(characterId, itemId), Times.Once);
+        _mockRepository.Verify(repo => repo.GetInventoryItemByIdAsync(characterId, itemId, type), Times.Once);
     }
 
     [Fact]
@@ -90,14 +97,17 @@ public class InventoryServiceTests
     public async Task DeleteInventoryItemAsync_DeletesItem()
     {
         // Arrange
+        string type = "player"; // Add type parameter
         int characterId = 1;
         int itemId = 1;
         var item = new InventoryItem { Id = itemId, ItemName = "Sword", Quantity = 1 };
 
-        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(characterId, itemId)).ReturnsAsync(item);
+        // Setup mock to include type parameter
+        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(characterId, itemId, type))
+                       .ReturnsAsync(item);
 
         // Act
-        var result = await _service.DeleteInventoryItemAsync(characterId, itemId);
+        var result = await _service.DeleteInventoryItemAsync(characterId, itemId, type);
 
         // Assert
         Assert.True(result);
@@ -110,11 +120,14 @@ public class InventoryServiceTests
         // Arrange
         int characterId = 1;
         int itemId = 99;
+        string type = "player"; // Add type parameter
 
-        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(characterId, itemId)).ReturnsAsync(It.IsAny<InventoryItem>());
+        // Setup mock to include type parameter
+        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(characterId, itemId, type))
+                       .ReturnsAsync((InventoryItem?)null);
 
         // Act
-        var result = await _service.DeleteInventoryItemAsync(characterId, itemId);
+        var result = await _service.DeleteInventoryItemAsync(characterId, itemId, type);
 
         // Assert
         Assert.False(result);
@@ -195,7 +208,7 @@ public class InventoryServiceTests
         int itemId = 99;
         int sharedInventoryId = 1;
 
-        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(itemId)).ReturnsAsync(It.IsAny<InventoryItem>());
+        _mockRepository.Setup(repo => repo.GetInventoryItemByIdAsync(itemId)).ReturnsAsync((InventoryItem?)null);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _service.MoveItemToSharedInventoryAsync(itemId, sharedInventoryId));
